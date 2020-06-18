@@ -14,10 +14,6 @@ package cn.syl.leetcode.dp;
  * 输入: "cbbd"
  * 输出: "bb"
  *
- * 来源：力扣（LeetCode）
- * 链接：https://leetcode-cn.com/problems/longest-palindromic-substring
- * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
- *
  * 解题：
  * 1.确定的状态
  * dp[i][j] 代表i到j的字符串是回文，true 否则fasle
