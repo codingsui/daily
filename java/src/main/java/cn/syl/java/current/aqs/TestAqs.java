@@ -27,6 +27,7 @@ public class TestAqs implements Lock {
             }).start();
         }
         System.out.println(a.a);
+
     }
     private static class A{
         volatile int a;
