@@ -11,19 +11,18 @@ public class TestInterrupt {
     public static void main(String[] args) throws Exception {
         Lock lock = new ReentrantLock();
 
-        for (int i = 0; i < 2; i++) {
-            Thread t = new Thread(()->{
-                lock.lock();
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println(Thread.currentThread().getName());
-                lock.unlock();
-            });
-            t.start();
-        }
-
+//        for (int i = 0; i < 10; i++) {
+//            Thread t = new Thread(()->{
+//                lock.lock();
+//                try {
+//                    Thread.sleep(10000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                lock.unlock();
+//            });
+//            t.start();
+//        }
+        System.out.println(2 >>> 16);
     }
 }
