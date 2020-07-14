@@ -1,4 +1,4 @@
-package cn.syl.java.c.tree;
+package cn.syl.java.tree.simple;
 
 public class Tree {
     private int data;
@@ -7,8 +7,22 @@ public class Tree {
 
     private Tree right;
 
+    private int height;
+
+    public Tree() {
+        this.height = 1;
+    }
+
     public Tree(int data) {
+        this();
         this.data = data;
+    }
+
+    public Tree(int data, Tree left, Tree right) {
+        this();
+        this.data = data;
+        this.left = left;
+        this.right = right;
     }
 
     public int getData() {
