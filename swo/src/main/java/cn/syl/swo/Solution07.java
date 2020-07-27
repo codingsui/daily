@@ -1,5 +1,8 @@
 package cn.syl.swo;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 面试题07. 重建二叉树
  * 输入某二叉树的前序遍历和中序遍历的结果，请重建该二叉树。
@@ -13,20 +16,53 @@ package cn.syl.swo;
  *     /  \
  *    15   7
  *
+ *    核心思想：从先序遍历中可以确定根结点，
+ *            然后在中序遍历中根据根结点去分割该结点相关的左右子树
+ *            然后递归实现左右子树的遍历
+ *
  */
 public class Solution07 {
+
+    /**
+     * 放入类中是为了减少参数传递
+     */
+
+    /**
+     * 存储中序遍历索引 方便快速定位中序遍历中的元素，减少查找时间
+     */
+    private Map<Integer,Integer> map = new HashMap<>();
+    private int[] preorder;
 
     public TreeNode buildTree(int[] preorder, int[] inorder) {
         if (preorder == null || inorder == null || preorder.length == 0 || inorder.length == 0){
             return null;
         }
-        TreeNode t;
-        while (true){
-//            preorder
-            break;
+        this.preorder = preorder;
+        for (int i = 0; i < preorder.length; i++) {
+            map.put(inorder[i],i);
         }
 
-        return null;
+        return recuror(0,0,preorder.length-1);
+    }
+
+    /**
+     *
+     * @param preIndex 先序遍历根结点中的索引位置
+     * @param leftIndex 中序遍历左边界
+     * @param rightIndex 中序遍历右边界
+     * @return
+     */
+    private TreeNode recuror(int preIndex, int leftIndex, int rightIndex) {
+        if (leftIndex > rightIndex){
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[preIndex]);
+
+        int idx = map.get(preorder[preIndex]);
+        root.left = recuror(preIndex + 1,leftIndex,idx - 1);
+        // 重点说明右子树的根结点就是原根结点 +  左子树的全部元素，即左子树的结点数量 = 右边界-左边界 + 1；
+        root.right = recuror(preIndex + (idx - 1 - leftIndex + 1) + 1,idx + 1,rightIndex);
+        return root;
     }
 
 }
