@@ -10,10 +10,10 @@ public class ThreadLocalTest {
     private static ThreadLocal<SimpleDateFormat> sdf = new ThreadLocal<>();
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < 100; i++) {
             executorService.submit(new DateUtil("2019-11-25 09:00:" + i % 60));
         }
-
+        executorService.shutdown();
     }
 
 
