@@ -13,6 +13,7 @@
         <module>java</module>
         <module>leetcode</module>
         <module>swo</module>
+        <module>web-test</module>
     </modules>
     <dependencyManagement>
         <dependencies>
