@@ -20,6 +20,7 @@
     <modules>
         <module>logback-web</module>
         <module>web-core</module>
+        <module>rabbitMq</module>
     </modules>
 
 
