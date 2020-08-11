@@ -4,7 +4,9 @@ import cn.syl.rabbitmq.Contast;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.support.converter.ContentTypeDelegatingMessageConverter;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.SimpleMessageConverter;
@@ -64,7 +66,6 @@ public class AmqpConfig {
     public Queue testDelayDirectExchangeQueue() {
         return new Queue(Contast.TEST_DELAY_EXCHANGE_QUEUE);
     }
-
     @Bean
     public Binding bindDelayDirect() {
         //链式写法，绑定交换机和队列，并设置匹配键
@@ -76,5 +77,77 @@ public class AmqpConfig {
                 //并设置匹配键
                 .withQueueName();
     }
+    /*
+        fanout交换机----------start
+     */
+    @Bean
+    public Queue fanoutQueueA() {
+        return new Queue(Contast.FANOUT_QUEUE_A);
+    }
+    @Bean
+    public Queue fanoutQueueB() {
+        return new Queue(Contast.FANOUT_QUEUE_B);
+    }
+    @Bean
+    public Queue fanoutQueueC() {
+        return new Queue(Contast.FANOUT_QUEUE_C);
+    }
+    @Bean
+    public FanoutExchange fanoutExchange() {
+        return new FanoutExchange(Contast.FANOUT_EXCHANGE, true, false);
+    }
+    @Bean
+    public Binding bindFanoutExchangeA() {
+        return BindingBuilder.bind(fanoutQueueA()).to(fanoutExchange());
+    }
+    @Bean
+    public Binding bindFanoutExchangeB() {
+        return BindingBuilder.bind(fanoutQueueB()).to(fanoutExchange());
+    }
+    @Bean
+    public Binding bindFanoutExchangeC() {
+        return BindingBuilder.bind(fanoutQueueC()).to(fanoutExchange());
+    }
+
+    /*
+        fanout交换机----------end
+     */
+
+
+    /*
+       topic交换机----------start
+    */
+    @Bean
+    public TopicExchange topicExchange() {
+        return new TopicExchange(Contast.TOPIC_EXCHANGE, true, false);
+    }
+    @Bean
+    public Queue topicQueueA() {
+        return new Queue(Contast.TOPIC_QUEUE_A);
+    }
+    @Bean
+    public Queue topicQueueB() {
+        return new Queue(Contast.TOPIC_QUEUE_B);
+    }
+    @Bean
+    public Queue topicQueueC() {
+        return new Queue(Contast.TOPIC_QUEUE_C);
+    }
+    @Bean
+    public Binding bindtopicExchangeA() {
+        return BindingBuilder.bind(topicQueueA()).to(topicExchange()).with("a.#");
+    }
+    @Bean
+    public Binding bindtopicExchangeB() {
+        return BindingBuilder.bind(topicQueueB()).to(topicExchange()).with("a.*");
+    }
+    @Bean
+    public Binding bindtopicExchangeC() {
+        return BindingBuilder.bind(topicQueueC()).to(topicExchange()).with("a.b.*");
+    }
+
+    /*
+       topic交换机----------end
+    */
 
 }

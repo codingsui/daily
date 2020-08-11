@@ -19,4 +19,17 @@ public class TestService {
         sendUtils.testQueue(obj);
         return ResponseDto.ok();
     }
+
+
+    public ResponseDto sendFanout(){
+        JSONObject obj = new JSONObject();
+        obj.put("uid",CoreUtils.getUUId());
+        sendUtils.fanoutQueue(obj);
+        return ResponseDto.ok();
+    }
+
+    public ResponseDto sendTopic(){
+        sendUtils.topicQueue();
+        return ResponseDto.ok();
+    }
 }

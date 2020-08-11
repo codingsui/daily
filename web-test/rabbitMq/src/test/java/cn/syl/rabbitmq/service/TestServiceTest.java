@@ -18,4 +18,14 @@ public class TestServiceTest{
     public void testSendTest() {
         testService.sendTest();
     }
+
+    @Test
+    public void testSendFanout() {
+        testService.sendFanout();
+    }
+
+    @Test
+    public void testSendTopic() {
+        testService.sendTopic();
+    }
 }

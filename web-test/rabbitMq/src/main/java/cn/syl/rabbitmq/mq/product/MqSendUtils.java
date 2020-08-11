@@ -7,7 +7,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 
 @Component
 @Slf4j
@@ -25,4 +24,28 @@ public class MqSendUtils {
     }
 
 
+    public void fanoutQueue(JSONObject obj){
+        if (obj == null){
+            return;
+        }
+        log.info("fanoutQueue--发送消息：{}，至交换机：{}",obj.toString(),Contast.FANOUT_EXCHANGE);
+        rabbitTemplate.convertAndSend(Contast.FANOUT_EXCHANGE,"",obj);
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void topicQueue(){
+        log.info("topicQueue--发送消息，至交换机：{}",Contast.TOPIC_EXCHANGE);
+        rabbitTemplate.convertAndSend(Contast.TOPIC_EXCHANGE,"a.b.c","a.b.c");
+        rabbitTemplate.convertAndSend(Contast.TOPIC_EXCHANGE,"a.b","a.b");
+        rabbitTemplate.convertAndSend(Contast.TOPIC_EXCHANGE,"a.","a.");
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
