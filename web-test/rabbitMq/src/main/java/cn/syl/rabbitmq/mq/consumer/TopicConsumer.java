@@ -2,6 +2,8 @@ package cn.syl.rabbitmq.mq.consumer;
 
 import cn.syl.rabbitmq.Contast;
 import com.alibaba.fastjson.JSONObject;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.impl.AMQImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;

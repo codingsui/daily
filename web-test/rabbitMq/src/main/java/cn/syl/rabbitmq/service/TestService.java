@@ -7,6 +7,8 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+
 @Service
 public class TestService {
 
@@ -30,6 +32,11 @@ public class TestService {
 
     public ResponseDto sendTopic(){
         sendUtils.topicQueue();
+        return ResponseDto.ok();
+    }
+
+    public ResponseDto confirmQueue(String msg){
+        sendUtils.confirmQueue(msg);
         return ResponseDto.ok();
     }
 }

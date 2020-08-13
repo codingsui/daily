@@ -18,5 +18,7 @@ public class Contast {
     public static final String TOPIC_QUEUE_B = "topic_queue_b";
     public static final String TOPIC_QUEUE_C = "topic_queue_c";
 
+    public static final String CONFIRM_CONSUMER_QUEUE = "confirm_queue";
+
     public static final String TEST_DELAY_EXCHANGE = "test_delay_exchange";
 }

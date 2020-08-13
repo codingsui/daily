@@ -150,4 +150,19 @@ public class AmqpConfig {
        topic交换机----------end
     */
 
+    /*
+       消息确认交换机----------start
+    */
+    @Bean
+    public Queue confirmQueue() {
+        return new Queue(Contast.CONFIRM_CONSUMER_QUEUE);
+    }
+    @Bean
+    public Binding bindconfirmQueue() {
+        return BindingBuilder.bind(confirmQueue()).to(rabbitmqDirectExchange()).withQueueName();
+    }
+    /*
+       消息确认交换机----------end
+    */
+
 }
