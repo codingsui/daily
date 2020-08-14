@@ -39,4 +39,9 @@ public class TestService {
         sendUtils.confirmQueue(msg);
         return ResponseDto.ok();
     }
+
+    public ResponseDto moreQueue(){
+        sendUtils.moreQueue();
+        return ResponseDto.ok();
+    }
 }

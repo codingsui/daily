@@ -21,4 +21,7 @@ public class Contast {
     public static final String CONFIRM_CONSUMER_QUEUE = "confirm_queue";
 
     public static final String TEST_DELAY_EXCHANGE = "test_delay_exchange";
+
+
+    public static final String MORE_QUEUE = "more_queue";
 }

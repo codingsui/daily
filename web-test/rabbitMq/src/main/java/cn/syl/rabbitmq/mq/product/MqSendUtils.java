@@ -59,4 +59,12 @@ public class MqSendUtils {
         log.info("confirmQueue--发送消息，至队列：{},msg:{}",Contast.CONFIRM_CONSUMER_QUEUE,msg);
         rabbitTemplate.convertAndSend(Contast.CONFIRM_CONSUMER_QUEUE,msg);
     }
+
+
+    public void moreQueue()  {
+        for (int i = 0; i < 10; i++) {
+            log.info("confirmQueue--发送消息，至队列：{},msg:{}",Contast.CONFIRM_CONSUMER_QUEUE,String.valueOf(i));
+            rabbitTemplate.convertAndSend(Contast.MORE_QUEUE,String.valueOf(i));
+        }
+    }
 }

@@ -43,6 +43,21 @@ public class AmqpConfig {
         return new Queue(Contast.TEST_QUEUE);
     }
 
+    @Bean
+    public Queue moreQueue() {
+        return new Queue(Contast.MORE_QUEUE);
+    }
+    @Bean
+    public Binding bindMoreQueueToDirect() {
+        //链式写法，绑定交换机和队列，并设置匹配键
+        return BindingBuilder
+                //绑定队列
+                .bind(moreQueue())
+                //到交换机
+                .to(rabbitmqDirectExchange())
+                //并设置匹配键
+                .withQueueName();
+    }
 
     @Bean
     public Queue testDirectExchangeQueue() {

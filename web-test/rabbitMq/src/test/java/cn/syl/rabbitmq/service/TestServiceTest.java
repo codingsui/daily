@@ -41,4 +41,13 @@ public class TestServiceTest{
             e.printStackTrace();
         }
     }
+    @Test
+    public void testmoreQueue() {
+        testService.moreQueue();
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
