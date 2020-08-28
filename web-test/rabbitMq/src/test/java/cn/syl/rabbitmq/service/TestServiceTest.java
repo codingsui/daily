@@ -36,7 +36,7 @@ public class TestServiceTest{
         String msg = "2";
         testService.confirmQueue(msg);
         try {
-            TimeUnit.SECONDS.sleep(5);
+            TimeUnit.SECONDS.sleep(235);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
