@@ -1,4 +1,4 @@
-package cn.syl.swo;
+package cn.syl.swo.newa;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,28 +13,7 @@ import java.util.Stack;
 
 **/
 public class Solution06 {
-
     public int[] reversePrint(ListNode head) {
-        if (head == null){
-            return new int[0];
-        }
-        List<Integer> list = new ArrayList<>();
-        reverse(head,list);
-        int[] a = new int[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            a[i] = list.get(i);
-        }
-        return a;
-    }
-    private void reverse(ListNode node,List<Integer> list){
-        if (node == null){
-            return;
-        }
-        reverse(node.next,list);
-        list.add(node.val);
-    }
-
-    public int[] reversePrint2(ListNode head) {
 
         Stack<Integer> stack = new Stack<>();
         ListNode h = head;
@@ -51,7 +30,7 @@ public class Solution06 {
         return tmp;
     }
 
-    public int[] reversePrint3(ListNode head) {
+    public int[] reversePrint2(ListNode head) {
         ListNode node = head;
         int count = 0;
         while (node != null) {
@@ -67,6 +46,7 @@ public class Solution06 {
         return nums;
     }
 }
+
 class ListNode {
      int val;
      ListNode next;

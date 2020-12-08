@@ -29,7 +29,7 @@ public class Solution18 {
         ListNode tmp2 = head;
         while (tmp != null){
             if (val == head.val){
-                tmp
+//                tmp
             }
         }
         return head;

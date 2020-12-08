@@ -72,6 +72,16 @@ public class Solution03 {
         return -1;
     }
 
+    /**
+     * 原地交换
+     * 时间o(n),空间0(1)
+     * 为什么时间是o(n)
+     * 可以设想把交换数字、查找数字解耦，分开看。在此方法下，每访问数组的一个单元格 nums[i] ，
+     * 就可以把一个数字填到属于它的位置；因此， 将 n 个数字填到正确的位置最多需要 N 次操作，
+     * 复杂度为 O(N) 。而搜索重复数字的条件是 nums[nums[i]] == nums[i] ，找到这样的数字只需要遍历一遍数组，复杂度为 O(N) 。 以上两个操作加起来是 O(2N) ，还是 O(N) 级别~ 可以结合你提出的示例的执行流程看：
+     * @param nums
+     * @return
+     */
     public int findRepeatNumber4(int[] nums) {
         if (nums == null || nums.length == 0){
             return -1;

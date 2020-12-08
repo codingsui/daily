@@ -65,9 +65,10 @@ public class Solution03 {
             if (nums[i] == nums[nums[i]]){
                 return nums[i];
             }
-            int tmp = nums[i];
-            nums[i] = nums[nums[i]];
-            nums[nums[i]] = tmp;
+            int tmp = nums[nums[i]];
+            nums[nums[i]] = nums[i];
+            nums[i] = tmp;
+            i--;
         }
         return -1;
     }

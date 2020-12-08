@@ -50,6 +50,13 @@ public class Solution04 {
     }
 
 
+    /**
+     * 将矩阵逆时针旋转45度，则发现类似与二叉搜索树
+     * https://leetcode-cn.com/problems/er-wei-shu-zu-zhong-de-cha-zhao-lcof/solution/mian-shi-ti-04-er-wei-shu-zu-zhong-de-cha-zhao-zuo/
+     * @param matrix
+     * @param target
+     * @return
+     */
     public boolean findNumberIn2DArray2(int[][] matrix, int target) {
         if (matrix == null || matrix.length == 0 || matrix[0].length == 0){
             return false;
