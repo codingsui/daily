@@ -21,6 +21,10 @@
         <module>logback-web</module>
         <module>web-core</module>
         <module>rabbitMq</module>
+        <module>mystart-spring-boot-starter</module>
+        <module>mystart-test</module>
+        <module>eureka-test</module>
+
     </modules>
 
 
