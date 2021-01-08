@@ -9,3 +9,8 @@ eureka:
     fetch-registry: false #指定客户端是否可以获取eureka注册信息
     service-url: #暴露服务中心地址
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+    registry-fetch-interval-seconds: 30 #定时更新间隔 默认30s
+    cache-refresh-executor-exponential-back-off-bound: 10 #更新膨胀系数 默认10
+spring:
+  application:
+    name: eureka

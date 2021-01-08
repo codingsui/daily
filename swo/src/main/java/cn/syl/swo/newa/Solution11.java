@@ -28,10 +28,14 @@ public class Solution11 {
         if (numbers == null || numbers.length == 0){
             return -1;
         }
-        int min
-        for (int i = 0; i < numbers.length; i++) {
-
+        int min = numbers[0];
+        for (int i = 1; i < numbers.length; i++) {
+            if (min > numbers[i]){
+                min = numbers[i];
+                break;
+            }
         }
+        return min;
     }
 
     /**
@@ -43,13 +47,26 @@ public class Solution11 {
         if (numbers == null || numbers.length == 0){
             return -1;
         }
+        int left = 0;
+        int right = numbers.length - 1;
+        int mid = 0;
+        while (left < right){
+            mid = (left + right) / 2;
+            if (numbers[mid] < numbers[left]){
+                right = mid - 1;
+            }else if (numbers[mid] > numbers[left]){
+                left = mid + 1;
+            }else {
+                break;
+            }
+        }
 
-        return numbers[i];
+        return numbers[mid];
     }
 
     public static void main(String[] args) {
         Solution11 s = new Solution11();
-        int[] a = {3,1,3};
+        int[] a = {1,3,5};
         System.out.println(s.minArray2(a));
     }
 }
