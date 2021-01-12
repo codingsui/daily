@@ -23,15 +23,138 @@ Spring Cloud 中 Eureka Client 与 Eureka Server 的通信，及 Eureka Server �
 CAP 定理指的是在一个分布式系统中，Consistency（一致性）、 Availability（可用性）、Partition tolerance（分区容错性），三者不可兼得。
 
 - 一致性（C）：分布式系统中多个主机之间是否能够保持数据一致的特性。即，当系统数据发生更新操作后，各个主机中的数据仍然处于一致的状态。
-
 - 可用性（A）：系统提供的服务必须一直处于可用的状态，即对于用户的每一个请求，系统总是可以在有限的时间内对用户做出响应。
 - 分区容错性（P）：分布式系统在遇到任何网络分区故障时，仍能够保证对外提供满足一致性和可用性的服务。
 
+CA - 单点集群，满足一致性，可用性，通常在可拓展性上不太强大：往节点 A 插入新数据，但是由于分区故障导致数据无法同步，此时节点 A 和节点 B 数据不一致，为了保证一致性。客户端查询时只能返回 error，违背了 Availability
+CP - 满足一致性，分区容错性的系统，通常性能不是特别的高
+AP - 满足可用性，分区容错性，通过对数据一致性要求低一些
+
 CAP 定理的内容是：对于分布式系统，网络环境相对是不可控的，出现网络分区是不可避免的，因此系统必须具备分区容错性。但系统不能同时保证一致性与可用性。即要么 CP，要么 AP。
 
-### **Eureka** **与** **Zookeeper** **对比**
+#### **CAP中Eureka** **与** **Zookeeper** **对比**
 
-Eureka：AP， zk：CP
+> https://www.cnblogs.com/wei57960/p/12260228.html
+
+Eureka：AP，eureka各个节点是平等的，几个节点的挂掉并不会影响正常节点的工作，剩余节点还是提供注册和查询服务，如果客户端向服务端注册时发现服务不可用会自动切换到其他服务节点。如果只有一台eureka服务存在，就可以保证注册服务可用，只不过查到的信息可能不是最新的。
+
+ zk：CP，主从架构，在选举过程中会停止服务，知道选举成功后才会再次对外提供服务，优先保持一致性，才会顾及可用性。
+
+#### CAP为什么不能同时满足？
+
+因为网络本身无法做到 100% 可靠，有可能出故障，所以分区是一个必然的现象。如果我们选择了 CA 而放弃了 P，那么当发生分区现象时，为了保证 C，系统需要禁止写入，当有写入请求时，系统返回 error（例如，当前系统不允许写入），这又和 A 冲突了，因为 A 要求返回 no error 和 no timeout。因此，分布式系统理论上不可能选择 CA 架构，只能选择 CP 或者 AP 架构。
+
+### eureka自我保护机制
+
+默认15min如果85%的节点没有正常心跳，那么eureka就会任务客户端与注册中心之间的网络出现异常
+
+## 限流算法
+
+> https://www.cnblogs.com/cjsblog/p/9379516.html
+>
+> https://www.cnblogs.com/xuwc/p/9123078.html（好文章）
+
+一般开发高并发系统常见的限流有：限制总并发数（比如数据库连接池、线程池）、限制瞬时并发数（如nginx的limit_conn模块，用来限制瞬时并发连接数）、限制时间窗口内的平均速率（如Guava的RateLimiter、nginx的limit_req模块，限制每秒的平均速率）；其他还有如限制远程接口调用速率、限制MQ的消费速率。另外还可以根据网络连接数、网络流量、CPU或内存负载等来限流。
+
+### 令牌桶算法
+
+原理是系统会以一个恒定的速率往桶里放令牌，而如果请求需要被处理，需要先从桶中获取一个令牌，当桶里面没有令牌的时候会拒绝服务。
+
+
+
+![image](http://note.youdao.com/yws/public/resource/53b088853ba2efc078c3e41f7996b610/xmlnote/0335628729024CE99E44EF4F81125C48/17286)
+
+```java
+//com.netflix.discovery.util; springcloud中eureka在监听
+public class RateLimiter {
+
+    private final long rateToMsConversion;
+
+    private final AtomicInteger consumedTokens = new AtomicInteger();
+    private final AtomicLong lastRefillTime = new AtomicLong(0);
+
+    @Deprecated
+    public RateLimiter() {
+        this(TimeUnit.SECONDS);
+    }
+
+    public RateLimiter(TimeUnit averageRateUnit) {
+        switch (averageRateUnit) {
+            case SECONDS:
+                rateToMsConversion = 1000;
+                break;
+            case MINUTES:
+                rateToMsConversion = 60 * 1000;
+                break;
+            default:
+                throw new IllegalArgumentException("TimeUnit of " + averageRateUnit + " is not supported");
+        }
+    }
+
+    public boolean acquire(int burstSize, long averageRate) {
+        return acquire(burstSize, averageRate, System.currentTimeMillis());
+    }
+
+    public boolean acquire(int burstSize, long averageRate, long currentTimeMillis) {
+        if (burstSize <= 0 || averageRate <= 0) { // Instead of throwing exception, we just let all the traffic go
+            return true;
+        }
+
+        refillToken(burstSize, averageRate, currentTimeMillis);
+        return consumeToken(burstSize);
+    }
+
+  //生成token
+    private void refillToken(int burstSize, long averageRate, long currentTimeMillis) {
+        long refillTime = lastRefillTime.get();//最后填充时间
+        long timeDelta = currentTimeMillis - refillTime;//增量时间
+
+        long newTokens = timeDelta * averageRate / rateToMsConversion;//生成的令牌数量
+        if (newTokens > 0) {
+            long newRefillTime = refillTime == 0
+                    ? currentTimeMillis
+                    : refillTime + newTokens * rateToMsConversion / averageRate;//填充时间
+            if (lastRefillTime.compareAndSet(refillTime, newRefillTime)) {
+                while (true) {
+                    int currentLevel = consumedTokens.get();//当前使用令牌数量
+                    int adjustedLevel = Math.min(currentLevel, burstSize); // In case burstSize decreased //防止意外情况桶满
+                    int newLevel = (int) Math.max(0, adjustedLevel - newTokens);//调整令牌使用数量
+                    if (consumedTokens.compareAndSet(currentLevel, newLevel)) {
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean consumeToken(int burstSize) {
+        while (true) {
+            int currentLevel = consumedTokens.get();
+            if (currentLevel >= burstSize) {
+                return false;
+            }
+            if (consumedTokens.compareAndSet(currentLevel, currentLevel + 1)) {
+                return true;
+            }
+        }
+    }
+
+    public void reset() {
+        consumedTokens.set(0);
+        lastRefillTime.set(0);
+    }
+}
+```
+
+### 漏桶算法
+
+主要目的是控制数据注入到网络的速率，平滑网络上的突发流量。漏桶算法提供了一种机制，通过它，突发流量可以被整形以便为网络提供一个稳定的流，多余流量会被丢弃掉
+
+![image](http://note.youdao.com/yws/public/resource/53b088853ba2efc078c3e41f7996b610/xmlnote/1CAD883AC62642DF8950505B145FABF3/17288)
+
+### 两个算法的区别？
+
+两者主要区别在于“漏桶算法”能够强行限制数据的传输速率，而“令牌桶算法”在能够限制数据的平均传输速率外，还允许某种程度的突发传输。在“令牌桶算法”中，只要令牌桶中存在令牌，那么就允许突发地传输数据直到达到用户配置的门限，所以它适合于具有突发特性的流量。
 
 # 源码分析
 
