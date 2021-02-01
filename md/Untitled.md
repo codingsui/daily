@@ -1,336 +1,310 @@
 [TOC]
+java多线程编程核心技术-》java并发编程实践-》JUC源码阅读 + 相关博客 -》做/答题
 
-# 基本问题
+# 问题
 
-### 在源码中，这个@Bean方法上同时出现了@RefreshScope、@ConditionalOnMissionBean，与@Lazy 注解是否存在矛盾呢
+## 并发与并行的区别
 
-- @RefreshScope 注解是 Spring Cloud 中定义的一个注解。其表示的意思是，该@Bean方法会以多例的形式生成会自动刷新的 Bean 实例
+并发（concurrency）：把任务在不同的时间点交给处理器进行处理。在同一时间点，任务并不会同时运行。
+并行（parallelism）：把每一个任务分配给每一个处理器独立完成。在同一时间点，任务一定是同时运行。
 
-- @ConditionalOnMissionBean 注解表示的意思是，只有当容器中没有@Bean 要创建的实
+## Thread核心方法了解哪些
 
-  例时才会创建新的实例，即这里创建的@Bean 实例是单例的
+> https://www.cnblogs.com/tutubaobao/p/10050169.html
 
-- @Lazy 注解表示延迟实例化。即在当前配置类被实例化时并不会调用这里的@Bean 方法去创建实例，而是在代码执行过程中，真正需要这个@Bean 方法的实例时才会创建
+## Thread中断
 
-这三个注解的联用不存在矛盾，其要表达的意思是，这个@Bean 会以延迟实例化的形式创建一个单例的对象，而该对象具有自动刷新功能
+> https://blog.csdn.net/weixin_42476601/article/details/83045889
 
-### Spring Cloud 中 Eureka Client 与 Eureka Server 的通信，及 Eureka Server 间的通信是如何实现的？请简单介绍一下
+| public static boolean interrupted | 测试当前线程是否已经中断。如果线程处于中断状态返回true，否则返回false。同时该方法将清除的线程的中断状态。即，如果连续两次调用该方法，则第二次调用将返回 false。该方法可用于清除线程中断状态使用。<br />```public static boolean interrupted() {    return currentThread().isInterrupted(true);}``` |
+| --------------------------------- | ------------------------------------------------------------ |
+| public boolean isInterrupted()    | 测试线程是否已经中断。线程的中断状态不受该方法的影响。<br />```public boolean isInterrupted() {    return this.isInterrupted(false);}``` |
+| public void interrupt()           | 中断线程。<br />```public void interrupt() {    if (this != currentThread()) {        this.checkAccess();    }    Object var1 = this.blockerLock;    synchronized(this.blockerLock) {        Interruptible var2 = this.blocker;        if (var2 != null) {            this.interrupt0();            var2.interrupt(this);            return;        }    }    this.interrupt0();}``` |
 
-Spring Cloud 中 Eureka Client 与 Eureka Server 的通信，及 Eureka Server 间的通信，均采用的是 Jersey 框架。Jersey 框架是一个开源的 RESTful 框架，实现了 JAX-RS 规范。该框架的作用与 SpringMVC是相同的，其也是用户提交 URI 后，在处理器中进行路由匹配，路由到指定的后台业务。这个路由功能同样也是通过处理器完成的，只不过这里的处理器不叫Controller，而叫Resource。
+## 钩子函数和回调函数
 
-### CAP定理了解么？
+## 乐观锁和悲观锁
+ - 乐观锁认为每次去拿数据的时候别人都不会操作这块数据，因此不用对数据进行上锁。而悲观锁认为每次去操作数据的时候别人都会修改这块数据，所以在每次拿数据的时候都加上锁。因此乐观锁适合多读场景，而悲观锁适合多写场景。乐观锁使用CAS算法和版本号实现，但是会引起ABA、自旋时间长、单共享变量的问题。
+ - [详解](https://www.imooc.com/article/details/id/44217)
+## synchronize和lock区别
+ - 区别synchronize的作用于更大(方法，块)，实现原理是悲观锁，而lock实现原理是乐观锁
+ - [深入研究 Java Synchronize 和 Lock 的区别与用法](https://blog.csdn.net/natian306/article/details/18504111)
 
-CAP 定理指的是在一个分布式系统中，Consistency（一致性）、 Availability（可用性）、Partition tolerance（分区容错性），三者不可兼得。
+## Unsafe类的作用
+- 是java提供操作操作系统的类，大部分方法通过JNI调用底层方法实现
+- [详情](https://www.cnblogs.com/mickole/articles/3757278.html)
 
-- 一致性（C）：分布式系统中多个主机之间是否能够保持数据一致的特性。即，当系统数据发生更新操作后，各个主机中的数据仍然处于一致的状态。
-- 可用性（A）：系统提供的服务必须一直处于可用的状态，即对于用户的每一个请求，系统总是可以在有限的时间内对用户做出响应。
-- 分区容错性（P）：分布式系统在遇到任何网络分区故障时，仍能够保证对外提供满足一致性和可用性的服务。
+## CAS
+- CAS比较并交换算法，乐观锁策略，核心是以当前的内存地址V，旧的期望值A，与更新新值B，当满足当前A与V内的值相等时，在会将当前内存值A更改为B，否则不修改
+- 缺点
+    - 自旋时间过长
+    - 只能维持一个共享的原子变量
+    - ABA问题
+- 与阻塞同同步机制的区别，无需切换线程上下文和唤醒操作，获取同一个锁的线程进入自旋进入非阻塞同步
+- [面试必问的CAS](https://blog.csdn.net/v123411739/article/details/79561458)
+- [什么是CAS机制？](https://blog.csdn.net/qq_32998153/article/details/79529704)
 
-CA - 单点集群，满足一致性，可用性，通常在可拓展性上不太强大：往节点 A 插入新数据，但是由于分区故障导致数据无法同步，此时节点 A 和节点 B 数据不一致，为了保证一致性。客户端查询时只能返回 error，违背了 Availability
-CP - 满足一致性，分区容错性的系统，通常性能不是特别的高
-AP - 满足可用性，分区容错性，通过对数据一致性要求低一些
+## Class 类 getField、getDeclaredField区别
+- getField仅能获取类(或父类)的public成员 
+- getDeclaredField仅能获取类本身的成员
 
-CAP 定理的内容是：对于分布式系统，网络环境相对是不可控的，出现网络分区是不可避免的，因此系统必须具备分区容错性。但系统不能同时保证一致性与可用性。即要么 CP，要么 AP。
+## Field的getModifiers
+- 获取方法或变量前面的修饰符
+- 具体可以参考Modifier类
 
-#### **CAP中Eureka** **与** **Zookeeper** **对比**
-
-> https://www.cnblogs.com/wei57960/p/12260228.html
-
-Eureka：AP，eureka各个节点是平等的，几个节点的挂掉并不会影响正常节点的工作，剩余节点还是提供注册和查询服务，如果客户端向服务端注册时发现服务不可用会自动切换到其他服务节点。如果只有一台eureka服务存在，就可以保证注册服务可用，只不过查到的信息可能不是最新的。
-
- zk：CP，主从架构，在选举过程中会停止服务，知道选举成功后才会再次对外提供服务，优先保持一致性，才会顾及可用性。
-
-#### CAP为什么不能同时满足？
-
-因为网络本身无法做到 100% 可靠，有可能出故障，所以分区是一个必然的现象。如果我们选择了 CA 而放弃了 P，那么当发生分区现象时，为了保证 C，系统需要禁止写入，当有写入请求时，系统返回 error（例如，当前系统不允许写入），这又和 A 冲突了，因为 A 要求返回 no error 和 no timeout。因此，分布式系统理论上不可能选择 CA 架构，只能选择 CP 或者 AP 架构。
-
-### eureka自我保护机制
-
-默认15min如果85%的节点没有正常心跳，那么eureka就会任务客户端与注册中心之间的网络出现异常
-
-## 限流算法
-
-> https://www.cnblogs.com/cjsblog/p/9379516.html
->
-> https://www.cnblogs.com/xuwc/p/9123078.html（好文章）
-
-一般开发高并发系统常见的限流有：限制总并发数（比如数据库连接池、线程池）、限制瞬时并发数（如nginx的limit_conn模块，用来限制瞬时并发连接数）、限制时间窗口内的平均速率（如Guava的RateLimiter、nginx的limit_req模块，限制每秒的平均速率）；其他还有如限制远程接口调用速率、限制MQ的消费速率。另外还可以根据网络连接数、网络流量、CPU或内存负载等来限流。
-
-### 令牌桶算法
-
-原理是系统会以一个恒定的速率往桶里放令牌，而如果请求需要被处理，需要先从桶中获取一个令牌，当桶里面没有令牌的时候会拒绝服务。
-
+属性 | 值
+---|---
+public | 1
+private | 2
+protect | 4
+static | 8
+final | 16
 
 
-![image](http://note.youdao.com/yws/public/resource/53b088853ba2efc078c3e41f7996b610/xmlnote/0335628729024CE99E44EF4F81125C48/17286)
+## Thread.sleep与object.wait区别
+- sleep是静态方法，wait是实例方法
+- sleep使用没有限制，而wait方式必须在同步方法或者同步块内使用
+- sleep只会让出cup不会释放对象锁，而wait方法会释放对象锁
+- sleep在休眠时间到达时会等待获取cpu时间片继续执行，而wait方法需要notify或者notifyAll方法通知，才会进入就绪状态
 
-```java
-//com.netflix.discovery.util; springcloud中eureka在监听
-public class RateLimiter {
+## 守护线程的概念
 
-    private final long rateToMsConversion;
+## JMM（java 内存模型）
+### 在JAVA中什么地方引出的JMM？
+由于多线程之间可能出现线程不安全，而引发线程安全问题的核心就是内存数据不一致和指令的重排序，想要了解这两个问题的产生原因那么久需要了解JMM了
+### 概念
+java内存模型本质就是一种规则，用来约束程序中的共享变量的访问方式，为了屏蔽掉各种硬件/操作系统的内存访问差异让java程序运行在各种平台下都能打到内存一致性的效果。
+### JMM的抽象模型 
+实际就是在程序运行过程中，由于CPU的处理速度和主存的读写不在一个量级上，因此，共享变量存储在主存中，每个线程都有自己的工作内存，并会将主存中的共享变量拷贝到自己的工作内存上，之后的读写都使用工作内存上的变量副本，并在某个时刻将工作内存的变量副本写入到主存。
+### 抽象示意图 
+![image](https://user-gold-cdn.xitu.io/2018/4/30/16315b2410a9e3eb?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+    
+### 内存间的交互操作
+#### 抽象图
+![image](https://oscimg.oschina.net/oscnet/536c6dfd-305a-4b95-b12c-28ca5e8aa043.png)
+#### 具体操作
+- read:将主存中的一个变量传输到工作内存中
+- load:在read后执行，将read得到的值放入工作内存的变量副本中
+- use:把工作内存中的值传入到执行引擎
+- assign:将执行引擎接收到的值赋给工作内存的变量
+- store:将工作内存中的值传送到主存中
+- wtite:在store之后，将store获得的值写入主存的变量中
+- lock:作用于主存
+- unlock:作用于主存
 
-    private final AtomicInteger consumedTokens = new AtomicInteger();
-    private final AtomicLong lastRefillTime = new AtomicLong(0);
+### 重排序
+#### 产生原因
+为了提高性能，编译器和处理器常常会对指令进行重排序
 
-    @Deprecated
-    public RateLimiter() {
-        this(TimeUnit.SECONDS);
-    }
+遵守
+> as-if-serial（不过怎样进行重排序，单线程程序的执行结果不能被改变）
+#### 种类
+- 编译器重排序
+- 指令级的重排序
+- 内存系统的重排序
 
-    public RateLimiter(TimeUnit averageRateUnit) {
-        switch (averageRateUnit) {
-            case SECONDS:
-                rateToMsConversion = 1000;
-                break;
-            case MINUTES:
-                rateToMsConversion = 60 * 1000;
-                break;
-            default:
-                throw new IllegalArgumentException("TimeUnit of " + averageRateUnit + " is not supported");
-        }
-    }
+#### 条件
+- 单线程环境不能改变指令的顺序
+- 存在数据关系依赖的不能重排序
+- 无法通过happens-before原则退出来的，才能进行重排序
 
-    public boolean acquire(int burstSize, long averageRate) {
-        return acquire(burstSize, averageRate, System.currentTimeMillis());
-    }
+#### JMM两种不同性质的重排序
+![image](https://user-gold-cdn.xitu.io/2018/4/30/16315b40eb50a329?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
-    public boolean acquire(int burstSize, long averageRate, long currentTimeMillis) {
-        if (burstSize <= 0 || averageRate <= 0) { // Instead of throwing exception, we just let all the traffic go
-            return true;
-        }
+### 相关博客
+- [深入理解JMM](https://segmentfault.com/a/1190000019200613)
 
-        refillToken(burstSize, averageRate, currentTimeMillis);
-        return consumeToken(burstSize);
-    }
+## happens-before(先行发生)规则
+规则的含义是来阐述内存之间的可见性，实际上就是给编译器优化重排序加上约束，如果一个操作需要对另一个操作可见，那么这两个操作之间必然存在HB关系
 
-  //生成token
-    private void refillToken(int burstSize, long averageRate, long currentTimeMillis) {
-        long refillTime = lastRefillTime.get();//最后填充时间
-        long timeDelta = currentTimeMillis - refillTime;//增量时间
+具体规则
+- 程序顺序规则：一个线程中的每个操作，happens-before于该线程中的任意后续操作。
+- 监视器锁规则：对一个锁的解锁，happens-before于随后对这个锁的加锁。
+- volatile变量规则：对一个volatile域的写，happens-before于任意后续对这个volatile域的读。
+- 传递性：如果A happens-before B，且B happens-before C，那么A happens-before C。
+- start()规则：如果线程A执行操作ThreadB.start()（启动线程B），那么A线程的ThreadB.start()操作happens-before于线程B中的任意操作。
+- join()规则：如果线程A执行操作ThreadB.join()并成功返回，那么线程B中的任意操作happens-before于线程A从ThreadB.join()操作成功返回。
+- 程序中断规则：对线程interrupted()方法的调用先行于被中断线程的代码检测到中断时间的发生。
+- 对象finalize规则：一个对象的初始化完成（构造函数执行结束）先行于发生它的finalize()方法的开始。
+- 一个happens-before规则对应于一个或多个编译器和处理器重排序规则。对于Java程序员来说，happens-before规则简单易懂，它避免Java程序员为了理解JMM提供的内存可见性保证而去学习复杂的重排序规则以及这些规则的具体实现方法
 
-        long newTokens = timeDelta * averageRate / rateToMsConversion;//生成的令牌数量
-        if (newTokens > 0) {
-            long newRefillTime = refillTime == 0
-                    ? currentTimeMillis
-                    : refillTime + newTokens * rateToMsConversion / averageRate;//填充时间
-            if (lastRefillTime.compareAndSet(refillTime, newRefillTime)) {
-                while (true) {
-                    int currentLevel = consumedTokens.get();//当前使用令牌数量
-                    int adjustedLevel = Math.min(currentLevel, burstSize); // In case burstSize decreased //防止意外情况桶满
-                    int newLevel = (int) Math.max(0, adjustedLevel - newTokens);//调整令牌使用数量
-                    if (consumedTokens.compareAndSet(currentLevel, newLevel)) {
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    private boolean consumeToken(int burstSize) {
-        while (true) {
-            int currentLevel = consumedTokens.get();
-            if (currentLevel >= burstSize) {
-                return false;
-            }
-            if (consumedTokens.compareAndSet(currentLevel, currentLevel + 1)) {
-                return true;
-            }
-        }
-    }
-
-    public void reset() {
-        consumedTokens.set(0);
-        lastRefillTime.set(0);
-    }
-}
+## DCL(Double Check Lock)问题
+看着这个名字就可以想起单例模式的一种双重检查锁模式
 ```
-
-### 漏桶算法
-
-主要目的是控制数据注入到网络的速率，平滑网络上的突发流量。漏桶算法提供了一种机制，通过它，突发流量可以被整形以便为网络提供一个稳定的流，多余流量会被丢弃掉
-
-![image](http://note.youdao.com/yws/public/resource/53b088853ba2efc078c3e41f7996b610/xmlnote/1CAD883AC62642DF8950505B145FABF3/17288)
-
-### 两个算法的区别？
-
-两者主要区别在于“漏桶算法”能够强行限制数据的传输速率，而“令牌桶算法”在能够限制数据的平均传输速率外，还允许某种程度的突发传输。在“令牌桶算法”中，只要令牌桶中存在令牌，那么就允许突发地传输数据直到达到用户配置的门限，所以它适合于具有突发特性的流量。
-
-# 源码分析
-
-## eureka client源码
-
-### InstanceInfo
-
-两个重要的时间戳
-
-- lastDitdyTimestamp：记录在客户端被修改的时间， Client 端对 Instance 的修改
-
-  主要是 Instance 的续约信息被修改。该修改会被传递到 Server 端
-
-- lastUpdateTimestamp：记录在服务端杯修改的时间
-
-- overriddenStatus：客户端状态,有三个方法可以修改改值
-
-  - setOverriddenStatus()：该方法用于在 Server 端修改 instance 的 OverriddenStatus 可覆盖
-
-    状态的。这个状态的修改一般是用户通过 Actuator 提交的 POST 请求到 Eureka Server，对其
-
-    相应的 instance 的 OverriddenStatus 进行修改的。该状态的修改会引发 setStatusWithoutDirty()
-
-    方法的执行
-
-  - setStatusWithoutDirty()：该方法用于在 Server 端修改 instance 的 Status 状态，但在修改
-
-    instance的status时不记录修改时间。这也是这个方法名中withoutDirty的意思。但这个Server
-
-    端 Status 的修改会被发送给 Client 端。Client 端在接收到这个修改过的状态后，会引发 Client
-
-    端调用 setStatus()方法的执行
-
-  - setStatus()：该方法用于在Client端修改instance的status状态，并记录lastDirtyTimestamp。
-
-    这个状态的修改是这样的：用户通过 Actuator 修改了 Server 端 instance 的 OverriddenStatus
-
-    与 Status。Server 将修改后的 Status 发送给 Client，Client 在接收到后会调用这个 setStatus()
-
-    方法修改 instance 的 status 状态
-
-三个状态修改方法
-
-- setOverridenStatus()：发生在服务端
-
-- setStatusWithOutDirty()：发生在服务端
-
-- setStatus()：发生在客户端
-
-重写了equals方法
-
-### Applications
-
-包含了eureka server的所有注册信息，客户端获取的注册表，是一个Map
-
-- appNameApplicationMap：key是微服务名称，value是Application
-- Application：维护了一个相同名称的微服务列表
-
-Application 类中封装了一个 Set 集合，集合元素为“可以提供该微服务的所有主机的InstanceInfo。也就是说，Applications 中封装着所有微服务的所有提供者信息。
-
-### 心跳检测、定时更新续约信息、注册表更新
-
-![image](http://note.youdao.com/yws/public/resource/53b088853ba2efc078c3e41f7996b610/xmlnote/DC04F165B0A44C8B94B03D0F58EAD880/17155)
-
-- 注册表更新：注册表更新分为全量更新和增量更新
-
-### 续约关键
-
-![image](http://note.youdao.com/yws/public/resource/53b088853ba2efc078c3e41f7996b610/xmlnote/50780A8AB78943A1AF6377526CC289C5/17148)
-
-### 基本配置（yml）
-
+public class LazySingleton {  
+    private int someField;  
+      
+    private static LazySingleton instance;  
+      
+    private LazySingleton() {  
+        this.someField = 5;         // (1)  
+    }  
+      
+    public static LazySingleton getInstance() {  
+        if (instance == null) {                               // (2)  
+            synchronized(LazySingleton.class) {               // (3)  
+                if (instance == null) {                       // (4)  
+                    instance = new LazySingleton();           // (5)  
+                }  
+            }  
+        }  
+        return instance;                                      // (6)  
+    }  
+      
+    public int getSomeField() {  
+        return this.someField;                                // (7)  
+    }  
+}  
 ```
-server:
-  port: 8081
-eureka:
-  instance:
-    instance-id: client1-8081
-  client:
-    register-with-eureka: true #指定是否向注册中心注册自己
-    fetch-registry: true #指定客户端是否可以获取eureka注册信息
-    service-url: #暴露服务中心地址
-      defaultZone: http://localhost:8888/eureka
-    registry-fetch-interval-seconds: 30
-    cache-refresh-executor-exponential-back-off-bound: 10
-spring:
-  application:
-    name: client1
+- 情况分析
+    1.  A和B线程同时进入(2)
+    2.  A先获得锁，进入(3)，进行判断(4)进入(5)
+    3.  开始执行instance = new LazySingLeton(),可能JVM先分配一块空内存给instance，还未进行初始化，A释放锁(下面是初始化过程，由于JVM可能会对指令进行重排序，导致instance引用未被完全初始化)
+        1. memory＝allocate() //分配内存
+        2. ctorInstance（memory）； //对象初始化
+        3. instance＝memory；    //设置instance指向刚被分配的内存；  
+    4.  B获得锁检测instance != null，释放锁，获得instacne对象
+    5.  B开始调用getSomeField()方法但是获得得instance未进行初始化，someField=0，与预期的期望不符，**出现bug**
+- 解决方法
+    1. 静态内部类（推荐）
+    2. volatile变量
+- 博客
+    - [详解](https://www.iteye.com/topic/260515) 
+    
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*" #开启所有监控终端
-  endpoint:
-    shutdown:
-      enabled: true # 开启shutdown监控终端
+## java对象头
+### 介绍
+java对象存储在堆空间中，一个java对象包含对象头，对象体和对齐字节。
+![image](https://img-blog.csdnimg.cn/20190115141050902.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NDRE5fQ1A=,size_16,color_FFFFFF,t_70)
+
+各部分作用
+- Mark Word（标记字）：存储对象的锁状态，还可以配和GC，存储对象的hashcode
+- Klass Word：指向方法区中class对象的指针，表名该对象随时可以知道自己是哪一个class的实例
+- 数组长度：是可选的，只有当对象是数组时才有这部分
+- 对象体：存储对象的属性和值
+- 对齐字节：为了减少对内存的碎片空间
+
+[详解博客](https://blog.csdn.net/scdn_cp/article/details/86491792)
+
+### Mark Word（标记字）
+![image](https://img-blog.csdnimg.cn/20190111092408622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpdWR1bl9jb29s,size_16,color_FFFFFF,t_70)
+
+![image](https://img-blog.csdnimg.cn/20190115142040348.png)
+
+### 锁的分级
+#### 无锁状态
+#### 偏向锁
+当一个线程访问同步块并获取锁时，会在对象头和栈帧中的锁记录里存储锁偏向的线程ID，以后该线程在进入和退出同步块时不需要进行CAS操作来加锁和解锁，只需简单地测试一下对象头的Mark Word里是否存储着指向当前线程的偏向锁。如果测试成功，表示线程已经获得了锁。如果测试失败，则需要再测试一下Mark Word中偏向锁的标识是否设置成1（表示当前是偏向锁）：如果没有设置，则使用CAS竞争锁；如果设置了，则尝试使用CAS将对象头的偏向锁指向当前线程
+- ![image](https://user-gold-cdn.xitu.io/2018/4/30/16315cb9175365f5?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+####  轻量级锁
+线程在执行同步块之前，JVM会先在当前线程的栈桢中创建用于存储锁记录的空间，并将对象头中的Mark Word复制到锁记录中，官方称为Displaced Mark Word。然后线程尝试使用CAS将对象头中的Mark Word替换为指向锁记录的指针。如果成功，当前线程获得锁，如果失败，表示其他线程竞争锁，当前线程便尝试使用自旋来获取锁。
+![image](https://user-gold-cdn.xitu.io/2018/4/30/16315cb9193719c2?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+#### 重量级锁
+
+### 各种锁比较
+
+锁 | 优点 | 缺点 | 适用场景
+---|---|---|---
+偏向锁| 加锁和解锁不需要消耗额外的资源，和执行非同步方法相比只有纳秒级的差距 | 如果线程间存在锁的竞争会带来额外撤销所的 | 适合单线程获取同步锁
+轻量级锁 | 竞争锁不会发生阻塞，提高程序的响应速度 | 如果始终得不到锁的竞争，会导致自旋消耗CPU | 追求响应时间，同步块执行速度非常快
+重量级锁| 不会发生自旋，不会消耗CPU | 线程阻塞，响应时间长 | 追求吞吐量，同步块执行时间长
+
+
+
+## volatile
+volcatile是一种乐观锁机制，采用CAS算法实现对共享变量的同步，对于volcatile变量，每个线程对于变量的读写操作都需要同步主存，不在自己的工作内存直接读取和操作
+
+下面就展示了一个变量读取同步例子
 ```
+public class A {
+    private static  boolean isOver = false;
 
-### 启动类配置
-
-```java
-@EnableDiscoveryClient
-@SpringBootApplication
-public class Eurekaclient1Application {
     public static void main(String[] args) {
-        SpringApplication.run(Eurekaclient1Application.class,args);
+        Thread thread = new Thread(()->{
+                while (!isOver);
+        });
+
+        thread.start();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        isOver = true;
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("end");
     }
+
+}
+
+```
+
+
+## concurrent包的结构层次
+![image](https://user-gold-cdn.xitu.io/2018/5/3/163260cff7cb847c?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+## 初识AQS
+AQS是同步器，java提供的一种能够
+
+
+```
+graph TDd
+
+A(acquire开始执行)-->B{获取同步状态}
+B -->|成功|C(结束)
+subgraph addWait方法
+B-->|失败|newNode[当前线程包装为Node]
+newNode-->isTailNode{同步队列尾结点是否为null}
+isTailNode-->|否|CASTail{直接将当前节点CAS尾插入到同步队列}
+subgraph enq方法
+isTailNode-->|是|initTail{尾结点是否为null}
+initTail-->|是|initHead{CAS设置头结点}
+initHead-->|失败|initTail
+initHead-->|成功|D[尾结点=头结点]
+D-->initTail
+initTail-->|否|E{设置尾结点}
+E-->|失败|initTail
+end
+subgraph acquireQueued方法
+E-->|成功|F{前驱节点是头结点 & 获取锁成功}
+F-->|是|C
+F-->|否|d
+end
+end
+
+```
+
+
+- [AQS相关方法调用+解释](https://www.jianshu.com/p/9421028f821b)
+
+## java中>、>>、>>>的含义
+1.  '>',在数字间是判断大小的,结果是boolean
+eg:
+```
+int a = 1;
+int b = 2;
+if(a > bw){
+    ...
 }
 ```
 
-关键就是`EurekaClientAutoConfiguration`配置生效
+2. <<代表左移、>>代表右移,在数字中就是将整数变为二进制数，然后移位，在移位过程中是区分正负号的
 
-## eureka server
+3. '>>>'无符号移动
 
-### 基本配置
+## ^、| 、&、~
+1. ^ 异或运算
+2. | 或晕眩
+3. & 与运算
+4. ~ 非运算
 
-```
-server:
-  port: 8888
+## ConcurrentHashMap
 
-eureka:
-  instance:
-    hostname: localhost #指定eureka主机
-  client:
-    register-with-eureka: false #指定是否向注册中心注册自己
-    fetch-registry: false #指定客户端是否可以获取eureka注册信息
-    service-url: #暴露服务中心地址
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
-    registry-fetch-interval-seconds: 30 #定时更新间隔 默认30s
-    cache-refresh-executor-exponential-back-off-bound: 10 #更新膨胀系数 默认10
-spring:
-  application:
-    name: eureka
-```
-
-### 启动类配置
-
-```java
-@SpringBootApplication
-@EnableEurekaServer
-public class EurekaTestApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(EurekaTestApplication.class,args);
-    }
-}
-
-@Configuration(
-    proxyBeanMethods = false
-)
-
-//服务端重要配置类
-@Import({EurekaServerInitializerConfiguration.class})
-@ConditionalOnBean({Marker.class})
-@EnableConfigurationProperties({EurekaDashboardProperties.class, InstanceRegistryProperties.class})
-@PropertySource({"classpath:/eureka/server.properties"})
-```
-
-关键配置`@EnableEurekaServer`是为了服务端自动配置生效`EurekaServerAutoConfiguration`，
-
-### InstanceResource状态变更处理器
-
- #### 服务端注册表
-
-```
-ConcurrentHashMap<String, Map<String, Lease<InstanceInfo>>> registry
-        = new ConcurrentHashMap<String, Map<String, Lease<InstanceInfo>>>();
-```
-
-外层key：微服务名称
-
-外层value：该服务名称下的所有机器
-
-内层key：instanceId
-
-内层value：续约对象
-
-
-
+- [ConcurrentHashMap相关方法介绍](https://segmentfault.com/a/1190000015907000) 
+- [ConcurrentHashMap1.7与1.8区别](https://blog.csdn.net/weixin_44460333/article/details/86770169) 

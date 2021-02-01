@@ -14,6 +14,7 @@
         <module>leetcode</module>
         <module>swo</module>
         <module>web-test</module>
+        <module>web-test/sc-feign-client</module>
     </modules>
 
     <properties>
