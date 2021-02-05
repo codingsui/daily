@@ -18,12 +18,25 @@ public class Solution26 {
             val = x;
         }
     }
+
+    /**
+     * 循环 关键是找到终止条件
+     * @param A
+     * @param B
+     * @return
+     */
     public boolean isSubStructure(TreeNode A, TreeNode B) {
-        if (A == null || B == null || A.val != B.val){
+        return A != null && B != null && (isSub(A,B) ||isSubStructure(A.left,B)|| isSubStructure(A.right,B));
+    }
+        public boolean isSub(TreeNode A, TreeNode B) {
+        if (B == null){
+            return true;
+        }
+        if (A == null || A.val != B.val){
             return false;
         }
 
-        return isSubStructure(A.left,B.left) && isSubStructure(A.right,B.right);
+        return isSub(A.left,B.left) && isSub(A.right,B.right);
     }
 
     public static void main(String[] args) {
