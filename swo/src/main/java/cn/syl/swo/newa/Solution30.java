@@ -19,11 +19,11 @@ public class Solution30 {
 
     }
 
-    public int top() {
-
-    }
-
-    public int min() {
-
-    }
+//    public int top() {
+//
+//    }
+//
+//    public int min() {
+//
+//    }
 }

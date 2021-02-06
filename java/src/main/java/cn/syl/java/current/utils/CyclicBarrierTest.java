@@ -10,7 +10,12 @@ public class CyclicBarrierTest {
 
     public static void main(String[] args) {
         ExecutorService service = Executors.newCachedThreadPool();
-        final CyclicBarrier cyclicBarrier = new CyclicBarrier(3);
+        final CyclicBarrier cyclicBarrier = new CyclicBarrier(3, new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("准备完成++++++");
+            }
+        });
         for (int i=0;i<3;i++){
             Runnable runnable = new Runnable() {
                 @Override
@@ -21,7 +26,7 @@ public class CyclicBarrierTest {
                                 + "即将到达集合地点1：当前已有" + (cyclicBarrier.getNumberWaiting()+1)
                                 + (cyclicBarrier.getNumberWaiting() == 2?"已经到齐，继续走":"正在等候") );
                         if (Thread.currentThread().getName().contains("pool-1-thread-2")){
-                            Thread.sleep(200000);
+                            Thread.sleep(2000);
                         }
                         cyclicBarrier.await();
                         Thread.sleep(new Random().nextInt(10000));

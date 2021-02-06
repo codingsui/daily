@@ -13,7 +13,7 @@ public class SemaphoreTest {
 
         //表示50个学生
         ExecutorService service = Executors.newFixedThreadPool(10);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             service.execute(() -> {
                 try {
                     System.out.println(Thread.currentThread().getName() + "  同学准备获取笔......");
