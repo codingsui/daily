@@ -26,6 +26,9 @@
         <module>eureka-test</module>
 
         <module>eureka-client</module>
+        <module>mybatis</module>
+        <module>es</module>
+        <module>sc-feign-client</module>
 
     </modules>
 

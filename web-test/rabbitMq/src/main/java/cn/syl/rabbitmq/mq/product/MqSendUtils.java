@@ -7,7 +7,6 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -59,9 +58,7 @@ public class MqSendUtils {
 
     public void confirmQueue(String msg)  {
         log.info("confirmQueue--发送消息，至队列：{},msg:{}",Contast.CONFIRM_CONSUMER_QUEUE,msg);
-        CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString().replace("-", ""));
 
-        rabbitTemplate.convertAndSend(Contast.CONFIRM_CONSUMER_QUEUE,(Object)msg,correlationData);
     }
 
 
