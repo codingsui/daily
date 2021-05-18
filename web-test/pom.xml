@@ -18,6 +18,7 @@
     <artifactId>web-test</artifactId>
     <packaging>pom</packaging>
     <modules>
+
         <module>logback-web</module>
         <module>web-core</module>
         <module>rabbitMq</module>
@@ -29,6 +30,7 @@
         <module>mybatis</module>
         <module>es</module>
         <module>sc-feign-client</module>
+        <module>zookeeper</module>
 
     </modules>
 

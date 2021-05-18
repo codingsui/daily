@@ -4,13 +4,13 @@
 
 ### jvm在什么情况下会加载一个类？
 
-在代码中用到的时候会加载类
-
-### 类加载过程是怎样的？
+###  类加载过程是怎样的？
 
 - 加载：通过类的完全限定名来获取类的二进制字节流，将其转化为所代表的数据结构存储在方法区运行时数据结构，在内存中生成一个java.lang.String对象代表这个类。（ps：数组类是由jvm直接创建，而不是类加载器创建，到那时数组类型是由类加载器创建）
+    -  作用：一、通过一个类的全限定名来获取定义此类的二进制字节流。二、将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构。三、在内存中生成一个代表这个类的 java.lang.Class 对象，作为方法区这个类的各种数据的访问入口。
 - 连接
   - 验证：确保字节流包含的信息符合虚拟机的要求，不会危害到虚拟机的安全。
+    - 文件格式验证、元数据验证、字节码验证、符号引用验证 
   - 准备：为类变量分配空间并初始化，对于final static会直接赋值
   - 解析：将符号引用替换成直接引用
 - 初始化：开始执行类中定义的java代码
@@ -22,6 +22,8 @@
 ### 类加载器有什么用？
 
 将“通过一个类的全限定名来获取此类描述的二进制字节流”这个动作放到jvm外部实现，以便让应用程序自己决定如何获取类。这个动作的代码模块就成为类加载器。任何一个类都需要有类加载器和类本身确定它的唯一性，两个类判定相等的前提是必然他们的类加载器是相同的
+
+
 
 ### 你了解有哪些类加载器？
 
@@ -46,10 +48,13 @@ Tomcat自定义了Common、Catalina、Shared等类加载器，其实就是用来
 
 类加载器之间的层级关系，成了类的双亲委派模型，除了顶层的类加载器之外其他类加载器都需要有父类加载器。如果一个类加载器收到了类加载请求，它首先不会自己加载这个类，而是将这个类委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该到顶层的启动类加载器，只有当父类加载无法完成这个加载请求（它搜索范围内找到所需要的类），子类加载器才尝试自己加载。
 
-#### 好处？
+#### 双亲委派模式的优点？
 
 - java类随着它的类加载器一起具备了优先级的层次关系，使得基础类得到了统一
 - 避免多份同样字节码加载
+
+1. 采用双亲委派模式的是好处是Java类随着它的类加载器一起具备了一种带有优先级的层次关系，通过这种层级关可以避免类的重复加载，当父亲已经加载了该类时，就没有必要子ClassLoader再加载一次
+2. 其次是考虑到安全因素，java核心api中定义类型不会被随意替换，假设通过网络传递一个名为java.lang.Integer的类，通过双亲委托模式传递到启动类加载器，而启动类加载器在核心Java API发现这个名字的类，发现该类已被加载，并不会重新加载网络传递的过来的java.lang.Integer，而直接返回已加载过的Integer.class，这样便可以防止核心API库被随意篡改。
 
 ## 到底什么是jvm内存区域的划分？
 
@@ -69,7 +74,7 @@ Tomcat自定义了Common、Catalina、Shared等类加载器，其实就是用来
     - -Xms -Xmx -Xmn 堆初始化大小、堆最大，新生代大小（堆空闲空间<40%会扩展到最大堆大小，空闲>70% 减少到初始大小，一般设置Xms=Xmx）
     - 老年代大小=Xmx-Xmn-永久代
 
-  - 方法区：存储加载后的类信息，静态变量，常量等数据，已被虚拟机加载的代码缓存等
+  - 方法区：存储加载后的类信息（类名称、方法、字段信息），运行时常量池，静态变量，常量等数据，已被虚拟机加载的代码缓存等
     - 运行时常量池：存放编译期生成的各种字面量和符号引用。编译器和运行期的String.intern（）都可以将常量放入池内。
     - JVM设置最小最大：-XX:PermSize=64M -XX:MaxPermSize=128M
 
@@ -81,7 +86,50 @@ Tomcat自定义了Common、Catalina、Shared等类加载器，其实就是用来
 - 元空间：jdk8后，永久代即方法区概念废弃，取而代之的是Metaspace元空间，使用的是本地内存而不是堆内存。
   - -XX:MetaspaceSize:128M -XX:MaxMetaspaceSize=128M
 
+### jdk1.6，1.7，1.8运行时数据区对比
 
+![image](http://note.youdao.com/yws/public/resource/53b088853ba2efc078c3e41f7996b610/xmlnote/8C70A25BB40D489D9D9393C8554DEE02/17304)
+
+- 在JDK1.7之前运行时常量池，字符串常量池，静态域等存放在方法区, 运行时常量池逻辑包含字符串常量池，此时hotspot虚拟机对方法区的实现为永久代。
+- 在JDK1.7中字符串常量池和静态域被从方法区（永久代）拿到了堆中（在堆中另开辟了一块空间）,这里没有提到运行时常量池,也就是说字符串常量池被单独拿到堆,运行时常量池剩下的东西还在方法区,也就是hotspot中的永久代。
+- 在JDK1.8 hotspot移除了永久代，用元空间(Metaspace)取而代之, 这时候字符串常量池还在堆,运行时常量池还在方法区,只不过方法区的实现从永久代变成了元空间(Metaspace)。
+
+### 各种池相关概念
+
+> https://blog.csdn.net/qq_26222859/article/details/73135660
+
+#### 常量
+
+被final修饰的*成员变量*。静态变量、实例变量、局部变量。或者基本类型的缓存
+
+#### 常量池
+
+存储字面量和符号引用。
+
+- 字面量：文本字符串，被final修饰的常量、基本数据类型
+- 符号引用：类和接口的全限定名、字段名称和描述符、方法名称和描述符
+
+#### 方法区中的运行时常量池
+
+存储
+
+### 什么是NIO？
+
+> https://blog.csdn.net/qq_36520235/article/details/81318189
+>
+> https://blog.csdn.net/u013857458/article/details/82424104?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-2.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-2.control
+
+### 为什么移除永久代？
+
+> https://www.cnblogs.com/jjj250/p/11994913.html
+
+1.  由于永久代使用jvm内存经常不够用或发生内存泄露，引发恼人的OutOfMemoryError异常（在Java Web开发中非常常见）。
+2.  移除永久代可以促进HotSpot JVM与JRockit VM两种虚拟机的融合，因为JRockit没有永久代。
+3.  对永久代进行调优是很困难的。永久代中的元数据可能会随着每一次Full GC发生而进行移动。
+
+### jvm栈帧包含哪些内容?
+
+> https://blog.csdn.net/wb_snail/article/details/80610676
 
 ## 对象
 
@@ -127,6 +175,14 @@ Tomcat自定义了Common、Catalina、Shared等类加载器，其实就是用来
 
 ### 对象之间会存在跨代引用怎么办？
 ​	跨代引用假说：跨代引用相对于同代引用来说仅占极少数。不必浪费专门的空间记录每一个对象是否存在及存在哪些跨代引用，只在新生代上建立一个全局的数据结构（被称为“记忆集”），这个结构会把老年代分成若干小块，标示老年代的哪一块内存会存在跨代引用，如果之后发生Minor GC时，只包含了跨代引用的小块内存里的对象才会被加入到GC Roots进行扫描。
+
+### 对象的分代年龄为什么是15
+
+https://javap.blog.csdn.net/article/details/103721326?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromBaidu-1.not_use_machine_learn_pai&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromBaidu-1.not_use_machine_learn_pai
+
+### 对象结构
+
+> https://blog.csdn.net/zqz_zqz/article/details/70246212
 
 ## 垃圾回收
 
@@ -476,3 +532,6 @@ Command line:  -Xms1024m -Xmx1024m -XX:MaxPermSize=256m -XX:MetaspaceSize=1024m 
 
 
 rong     25971     1  3 Oct19 ?        1-17:49:10 /home/rong/jdk/bin/java -Djava.util.logging.config.file=/home/rong/tomcat/tf_crawler_chsi/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -server -Xms4g -Xmx4g -XX:MaxNewSize=2g -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+HeapDumpOnOutOfMemoryError -javaagent:/home/rong/tomcat/tf_crawler_chsi/lib/jmxtrans-agent.jar=/home/rong/tomcat/tf_crawler_chsi/conf/jmxtrans-config-falcon-test.xml -Djdk.tls.ephemeralDHKeySize=2048 -Djava.protocol.handler.pkgs=org.apache.catalina.webresources -classpath /home/rong/tomcat/tf_crawler_chsi/bin/bootstrap.jar:/home/rong/tomcat/tf_crawler_chsi/bin/tomcat-juli.jar -Dcatalina.base=/home/rong/tomcat/tf_crawler_chsi -Dcatalina.home=/home/rong/tomcat/tf_crawler_chsi -Djava.io.tmpdir=/home/rong/tomcat/tf_crawler_chsi/temp org.apache.catalina.startup.Bootstrap start01
+
+# 经典面试题
+- 最容易忽视的10个JVM问题 https://mp.weixin.qq.com/s/9U1aHd2ZNouPnryvveajzg
