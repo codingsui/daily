@@ -25,6 +25,7 @@
         <module>mystart-spring-boot-starter</module>
         <module>mystart-test</module>
         <module>eureka-test</module>
+        <module>ribbon-test</module>
 
         <module>eureka-client</module>
         <module>mybatis</module>

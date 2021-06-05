@@ -15,6 +15,8 @@
         <module>swo</module>
         <module>web-test</module>
         <module>web-test/sc-feign-client</module>
+        <module>ribbon</module>
+        <module>web-test/ribbon</module>
     </modules>
 
     <properties>
