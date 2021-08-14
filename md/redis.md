@@ -937,7 +937,7 @@ auto-aof-rewrite-min-size 64mb
 #### AOF载入原理
 ![01fa8078ee639e62995f641c264d46b1.png](https://note.youdao.com/yws/public/resource/128bec5e2028fdd77a8da4db2231a1f6/xmlnote/8C62C3D277AE4CCCB2F13E333EEC76C2/17594)
 #### AOF重写原理
-![ca8f9909ef8f084266d4d3ea5aae1a6e.png](https://note.youdao.com/yws/public/resource/128bec5e2028fdd77a8da4db2231a1f6/xmlnote/9A040B2B7834444FA630C4B3995BCC49/17596)
+<img src="https://note.youdao.com/yws/public/resource/128bec5e2028fdd77a8da4db2231a1f6/xmlnote/9A040B2B7834444FA630C4B3995BCC49/17596" alt="ca8f9909ef8f084266d4d3ea5aae1a6e.png" style="zoom:67%;" />
 
 #### AOF重写入原理？
 

@@ -1,6 +1,6 @@
 package cn.syl.leetcode.dp.string.lis;
 
-public class One {
+public class 最大上升子序列 {
 
 
 

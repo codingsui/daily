@@ -1,8 +1,6 @@
 package cn.syl.dt.ct.service;
 
 import cn.syl.dt.ct.entity.LotteryDraw;
-import com.baomidou.mybatisplus.extension.service.IService;
-
 /**
  * <p>
  *  服务类
@@ -11,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author jobob
  * @since 2021-06-30
  */
-public interface ILotteryDrawService extends IService<LotteryDraw> {
+public interface ILotteryDrawService{
 
     /**
      * 增加一次抽奖次数

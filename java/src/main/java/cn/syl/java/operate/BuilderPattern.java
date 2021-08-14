@@ -7,12 +7,12 @@ public class BuilderPattern {
     public static void main(String[] args) {
         Builder builder = new ConBuilder();
         Director director = new Director(builder);
-        Product product = director.construct();
+        Product1 product = director.construct();
         System.out.println(product);
     }
 }
 @Data
-class Product{
+class Product1{
     private String partA;
     private String partB;
     private String partC;
@@ -31,11 +31,11 @@ abstract class  Builder{
     abstract Builder setB();
     abstract Builder setC();
 
-    abstract Product getResult();
+    abstract Product1 getResult();
 }
 class ConBuilder extends   Builder{
 
-    private Product product = new Product();
+    private Product1 product = new Product1();
 
 
     @Override
@@ -57,7 +57,7 @@ class ConBuilder extends   Builder{
     }
 
     @Override
-    public Product getResult() {
+    public Product1 getResult() {
         return product;
     }
 }
@@ -69,7 +69,7 @@ class Director{
         this.builder = builder;
     }
 
-    public Product construct(){
+    public Product1 construct(){
         builder.setA();
         builder.setB();
         builder.setC();

@@ -1,10 +1,6 @@
-package com.zhss.data.refill.center.service;
+package cn.syl.dt.ct.service;
 
-/**
- * 消息服务service组件
- * @author zhonghuashishan
- *
- */
+
 public interface MessageService {
 
 	/**

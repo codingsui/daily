@@ -1,8 +1,6 @@
 package cn.syl.dt.ct.service;
 
 import cn.syl.dt.ct.entity.DataPackage;
-import com.baomidou.mybatisplus.extension.service.IService;
-
 import java.util.List;
 
 /**
@@ -13,7 +11,7 @@ import java.util.List;
  * @author jobob
  * @since 2021-06-29
  */
-public interface IDataPackageService extends IService<DataPackage> {
+public interface IDataPackageService{
 
     /**
      * 查询所有的流量套餐

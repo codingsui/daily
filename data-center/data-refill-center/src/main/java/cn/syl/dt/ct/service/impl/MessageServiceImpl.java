@@ -1,15 +1,12 @@
-package com.zhss.data.refill.center.service.impl;
+package cn.syl.dt.ct.service.impl;
 
+
+import cn.syl.dt.ct.service.MessageService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import com.zhss.data.refill.center.service.MessageService;
-
-/**
- * 消息服务service组件
- * @author zhonghuashishan
- *
- */
 @Service
+@Slf4j
 public class MessageServiceImpl implements MessageService {
 
 	/**
@@ -23,7 +20,7 @@ public class MessageServiceImpl implements MessageService {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} 
-		System.out.println("给" + phoneNumber + "发送了一条短信：" + message); 
+		log.info("给" + phoneNumber + "发送了一条短信：" + message);
 	}
 	
 }

@@ -3,7 +3,6 @@ package cn.syl.dt.ct.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -41,10 +40,10 @@ public class RefillRequest implements Serializable {
 
     private Date updateTime;
 
-    @TableField(exist = false)
+
     private Coupon coupon;
 
-    @TableField(exist = false)
+
     private DataPackage dataPackage;
 
 }

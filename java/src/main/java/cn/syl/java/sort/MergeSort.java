@@ -40,20 +40,25 @@ public class MergeSort {
     }
 
     private static void sort(int[] array, int[] tmp, int left, int mid, int right) {
-        int leftEnd = mid++;
-        int index = left;
-        int num = right - left + 1;
-        while (left <= leftEnd && mid <= right){
-            tmp[index++] = array[left] < array[mid] ? array[left++] : array[mid++];
+        int i = left;
+        int j = mid + 1;
+        int index = 0;
+        while (i<=mid && j <= right){
+            if (array[i]<array[j]){
+                tmp[index++] = array[i++];
+            }else {
+                tmp[index++] = array[j++];
+            }
         }
-        while (left <= leftEnd){
-            tmp[index++] = array[left++];
+        while (i<=mid){
+            tmp[index++] = array[i++];
         }
-        while (mid <= right){
-            tmp[index++] = array[mid++];
+        while (j<=right){
+            tmp[index++] = array[j++];
         }
-        for (int i = 0; i < num; i++,right--) {
-            array[right] = tmp[right];
+        index = 0;
+        while (left <= right){
+           array[left++] = tmp[index++];
         }
     }
 }

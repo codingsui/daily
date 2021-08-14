@@ -10,7 +10,7 @@ public class TestService {
 
 
     @HystrixCommand(fallbackMethod = "fallbackMethod",commandKey = "test",commandProperties = {
-            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds",value = "100"),
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds",value = "1"),
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold",value = "10"),
             @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds",value = "10000"),
             @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage",value = "50"),},

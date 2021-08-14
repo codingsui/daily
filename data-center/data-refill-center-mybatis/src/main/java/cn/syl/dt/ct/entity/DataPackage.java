@@ -3,9 +3,7 @@ package cn.syl.dt.ct.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,7 +21,7 @@ public class DataPackage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
+
     protected Long id;
 
     private Double price;
@@ -38,10 +36,10 @@ public class DataPackage implements Serializable {
 
     private Date updateTime;
 
-    @TableField(exist = false)
+
     private PromotionActivity promotionActivity;
 
-    @TableField(exist = false)
+
     private CouponActivity couponActivity;
 
 }

@@ -1,16 +1,13 @@
-package com.zhss.data.refill.center.service.impl;
+package cn.syl.dt.ct.service.impl;
 
+
+import cn.syl.dt.ct.service.ThirdPartyService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import com.zhss.data.refill.center.service.ThirdPartyBossService;
-
-/**
- * 第三方运营商BOSS系统访问service组件
- * @author zhonghuashishan
- *
- */
 @Service
-public class ThirdPartyBossServiceImpl implements ThirdPartyBossService {
+@Slf4j
+public class ThirdPartyBossServiceImpl implements ThirdPartyService {
 
 	/**
 	 * 充值流量
@@ -20,7 +17,7 @@ public class ThirdPartyBossServiceImpl implements ThirdPartyBossService {
 	public void refillData(String phoneNumber, Long data) {
 		try {
 			Thread.sleep(500); 
-			System.out.println("已经完成为" + phoneNumber + "充值" + data + "MB流量");      
+			log.info("已经完成为" + phoneNumber + "充值" + data + "MB流量");
 		} catch (Exception e) {
 			e.printStackTrace(); 
 		}

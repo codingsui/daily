@@ -1,9 +1,13 @@
 package cn.syl.eurekaclient.controller;
 
+import com.netflix.appinfo.ApplicationInfoManager;
+import com.netflix.appinfo.InstanceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -14,6 +18,9 @@ public class TestController {
 
     @Autowired
     private DiscoveryClient discoveryClient;
+
+    @Autowired
+    private ApplicationInfoManager applicationInfoManager;
 
     @GetMapping("/discovery")
     public List<String> discoveryClient(){
@@ -32,5 +39,21 @@ public class TestController {
         return servers;
     }
 
+    @GetMapping("/get/{msg}")
+    public String get(@PathVariable("msg") String msg) throws InterruptedException {
+
+        Thread.sleep(10000);
+        return msg;
+    }
+
+    @GetMapping("/change")
+    public String change(@RequestParam("status") String status){
+        if (status.equals("1")){
+            applicationInfoManager.setInstanceStatus(InstanceInfo.InstanceStatus.DOWN);
+        }else {
+            applicationInfoManager.setInstanceStatus(InstanceInfo.InstanceStatus.UP);
+        }
+        return "ok";
+    }
 
 }

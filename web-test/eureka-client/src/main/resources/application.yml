@@ -1,8 +1,8 @@
 server:
-  port: 8082
+  port: 8081
 eureka:
   instance:
-    instance-id: client1-8081
+    instance-id: localhost:${server.port}
   client:
     register-with-eureka: true #指定是否向注册中心注册自己
     fetch-registry: true #指定客户端是否可以获取eureka注册信息
@@ -12,7 +12,7 @@ eureka:
     cache-refresh-executor-exponential-back-off-bound: 10
 spring:
   application:
-    name: client1
+    name: serviceA
 
 management:
   endpoints:

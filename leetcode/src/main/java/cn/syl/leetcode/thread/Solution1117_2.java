@@ -3,20 +3,23 @@ package cn.syl.leetcode.thread;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.IntConsumer;
 
-public class Solution1117 {
+public class Solution1117_2 {
 
     private Semaphore h = new Semaphore(2);
 
-    private Semaphore o = new Semaphore(0);
+    private Semaphore o = new Semaphore(1);
+
+    private CyclicBarrier c = new CyclicBarrier(3,()->{
+        h.release(2);
+        o.release(1);
+    });
+
+
 
     private volatile int status = 0;
 
-    public Solution1117() {
+    public Solution1117_2() {
 
     }
 
@@ -25,18 +28,26 @@ public class Solution1117 {
         // releaseHydrogen.run() outputs "H". Do not change or remove this line.
         h.acquire();
         releaseHydrogen.run();
-        o.release();
+        try {
+            c.await();
+        } catch (BrokenBarrierException e) {
+            e.printStackTrace();
+        }
     }
 
     public void oxygen(Runnable releaseOxygen) throws InterruptedException {
-        o.acquire(2);
+        o.acquire();
         // releaseOxygen.run() outputs "O". Do not change or remove this line.
         releaseOxygen.run();
-        h.release(2);
+        try {
+            c.await();
+        } catch (BrokenBarrierException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
-        Solution1117 s = new Solution1117();
+        Solution1117_2 s = new Solution1117_2();
 
 
         new Thread(){

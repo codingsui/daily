@@ -83,6 +83,10 @@ public class ZooKeeperLock extends AbstractZKLockMutex{
     @Override
     public boolean tryLock(){
         try {
+            Stat root = zooKeeper.exists("/testlocks/c",false);
+            if (root == null){
+                zooKeeper.create("/testlocks/c","1".getBytes(),ZooDefs.Ids.OPEN_ACL_UNSAFE,CreateMode.PERSISTENT);
+            }
             String node = zooKeeper.create( "/testlocks/c/a", "a".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE,CreateMode.EPHEMERAL_SEQUENTIAL);
             List<String> locks = zooKeeper.getChildren("/testlocks/c",false);
             TreeSet<String> sortedNodes = new TreeSet<>();

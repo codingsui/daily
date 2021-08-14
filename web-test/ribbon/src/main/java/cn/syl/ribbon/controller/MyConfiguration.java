@@ -1,4 +1,4 @@
-package cn.syl.ribbon;
+package cn.syl.ribbon.controller;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;

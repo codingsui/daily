@@ -3,9 +3,7 @@ package cn.syl.dt.ct.service.impl;
 import cn.syl.dt.ct.entity.RefillOrder;
 import cn.syl.dt.ct.mapper.order.RefillOrderMapper;
 import cn.syl.dt.ct.service.IRefillOrderService;
-import com.baomidou.dynamic.datasource.annotation.DS;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,21 +17,24 @@ import java.util.List;
  * @since 2021-06-30
  */
 @Service
-@DS("ct-order")
-public class RefillOrderServiceImpl extends ServiceImpl<RefillOrderMapper, RefillOrder> implements IRefillOrderService {
+
+public class RefillOrderServiceImpl  implements IRefillOrderService {
+
+    @Autowired
+    private RefillOrderMapper refillOrderMapper;
 
     @Override
     public void add(RefillOrder refillOrder) {
-        save(refillOrder);
+        refillOrderMapper.save(refillOrder);
     }
 
     @Override
     public List<RefillOrder> queryAll(Long userAccountId) {
-        return list(Wrappers.<RefillOrder>lambdaQuery().eq(RefillOrder::getBusinessAccountId,userAccountId));
+        return refillOrderMapper.queryAll(userAccountId);
     }
 
     @Override
     public RefillOrder queryById(Long id) {
-        return getById(id);
+        return refillOrderMapper.queryById(id);
     }
 }

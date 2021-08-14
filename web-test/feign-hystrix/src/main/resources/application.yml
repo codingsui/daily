@@ -1,0 +1,37 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: feign-hystrix
+
+eureka:
+  instance:
+    instance-id: feign-hystrix
+  client:
+    register-with-eureka: true #指定是否向注册中心注册自己
+    fetch-registry: true #指定客户端是否可以获取eureka注册信息
+    service-url: #暴露服务中心地址
+      defaultZone: http://localhost:8888/eureka
+    registry-fetch-interval-seconds: 30
+    cache-refresh-executor-exponential-back-off-bound: 10
+
+feign:
+  hystrix:
+    enabled: true
+
+ribbon:
+  ConnectTimeout: 10000
+  ReadTimeOut: 10000
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3600000
+    serverA:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20000

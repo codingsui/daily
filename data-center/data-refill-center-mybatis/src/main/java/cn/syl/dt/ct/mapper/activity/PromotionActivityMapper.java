@@ -1,7 +1,8 @@
 package cn.syl.dt.ct.mapper.activity;
 
 import cn.syl.dt.ct.entity.PromotionActivity;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
+
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author jobob
  * @since 2021-06-29
  */
-public interface PromotionActivityMapper extends BaseMapper<PromotionActivity> {
-
+public interface PromotionActivityMapper {
+    @Select("select * from promotion_activity where data_package_id = #{1} and status = 2")
+    PromotionActivity selectOne(Long dataPackageId);
 }

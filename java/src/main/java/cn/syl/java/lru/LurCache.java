@@ -1,6 +1,4 @@
-package cn.syl.java.limit;
-
-import cn.syl.java.lru.LRUCache;
+package cn.syl.java.lru;
 
 import java.util.HashMap;
 import java.util.Objects;

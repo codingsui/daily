@@ -1,25 +1,30 @@
 package cn.syl.feignclient.controller;
 
+import cn.syl.feignclient.feign.TestFeign;
 import com.alibaba.fastjson.JSONObject;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/feign", produces = "application/json;charset=UTF-8")
+@RequestMapping(value = "/f", produces = "application/json;charset=UTF-8")
 public class TestController {
 
     @Autowired
     private TestService testService;
 
+    @Autowired
+    private TestFeign testFeign;
 
     @GetMapping("/test")
     public JSONObject get(@RequestParam("type")Integer type){
         return testService.get(type);
+    }
+
+
+
+    @GetMapping("/f/{msg}")
+    public String getFeign(@PathVariable("msg") String msg){
+        return testFeign.ribbonA(msg).toString();
     }
 
 }

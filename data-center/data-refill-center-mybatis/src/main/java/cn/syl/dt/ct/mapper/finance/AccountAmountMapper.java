@@ -1,7 +1,9 @@
 package cn.syl.dt.ct.mapper.finance;
 
 import cn.syl.dt.ct.entity.AccountAmount;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
+
 
 /**
  * <p>
@@ -11,6 +13,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author jobob
  * @since 2021-06-30
  */
-public interface AccountAmountMapper extends BaseMapper<AccountAmount> {
+public interface AccountAmountMapper {
 
+
+    @Update("UPDATE account_amount "
+            + "SET accont_mount=accont_mount + #{updatedAmount} "
+            + "WHERE user_account_id=#{userAccountId}")
+    int updateAmount(@Param("userAccountId") Long userAccountId,
+                 @Param("updatedAmount") Double updatedAmount);
 }

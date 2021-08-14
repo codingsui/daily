@@ -1,8 +1,6 @@
 package cn.syl.dt.ct.service;
 
 import cn.syl.dt.ct.entity.RefillOrder;
-import com.baomidou.mybatisplus.extension.service.IService;
-
 import java.util.List;
 
 /**
@@ -13,7 +11,7 @@ import java.util.List;
  * @author jobob
  * @since 2021-06-30
  */
-public interface IRefillOrderService extends IService<RefillOrder> {
+public interface IRefillOrderService{
 
     /**
      * 增加一个充值订单

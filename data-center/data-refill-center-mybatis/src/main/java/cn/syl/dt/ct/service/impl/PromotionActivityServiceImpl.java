@@ -3,9 +3,6 @@ package cn.syl.dt.ct.service.impl;
 import cn.syl.dt.ct.entity.PromotionActivity;
 import cn.syl.dt.ct.mapper.activity.PromotionActivityMapper;
 import cn.syl.dt.ct.service.IPromotionActivityService;
-import com.baomidou.dynamic.datasource.annotation.DS;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +15,8 @@ import org.springframework.stereotype.Service;
  * @since 2021-06-29
  */
 @Service
-@DS("ct-activity")
-public class PromotionActivityServiceImpl extends ServiceImpl<PromotionActivityMapper, PromotionActivity> implements IPromotionActivityService {
+
+public class PromotionActivityServiceImpl  implements IPromotionActivityService {
 
 
     /**
@@ -33,6 +30,6 @@ public class PromotionActivityServiceImpl extends ServiceImpl<PromotionActivityM
      * @return 优惠活动
      */
     public PromotionActivity queryByDataPackageId(Long dataPackageId) {
-        return promotionActivityMapper.selectOne(Wrappers.<PromotionActivity>lambdaQuery().eq(PromotionActivity::getDataPackageId, dataPackageId).eq(PromotionActivity::getStatus, 2));
+        return promotionActivityMapper.selectOne(dataPackageId);
     }
 }

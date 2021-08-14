@@ -1,0 +1,38 @@
+server:
+  port: 9002
+spring:
+  application:
+    name: zuul-getway
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8888/eureka
+
+zuul:
+  routes:
+    serviceA:
+      path: /get/*
+  retryable: true
+
+#  ribbon.OkToRetryOnAllOperations=true
+#  ribbon.ConnectTimeout=2000
+#  ribbon.ReadTimeout=2000
+#  ribbon.MaxAutoRetriesNextServer=0
+#  ribbon.MaxAutoRetries=0
+#  ribbon.ServerListRefreshInterval=2000
+
+ribbon:
+  MaxAutoRetries: 3
+  MaxAutoRetriesNextServer: 0
+  ReadTimeout: 5000
+  ConnectTimeout: 2000
+  restclient:
+    enabled: true
+  eager-load:
+    enabled: true
+    clients: serverA
+  eureka:
+    enabled: ture

@@ -1,211 +1,231 @@
-server:
-  port: 8001
-
-
-spring:
-  datasource:
-    dynamic:
-      primary: master
-      hikari:
-        driver-class-name: com.mysql.cl.jdbc.Driver
-        max-pool-size: 200
-        min-idle: 5
-        connection-timeout: 60000
-        connection-init-sql: 'select 1'
-      datasource:
-        master:
-          url: jdbc:mysql://39.106.39.129:3306/data?useSSL=false&serverTimezone=Asia/Shanghai
-          username: root
-          password: 1311150301
-#          driver-class-name: com.mysql.jdbc.Driver
-#        ct-activity:
-#          url: jdbc:mysql://39.106.39.129:3306/ct-activity?useSSL=false&serverTimezone=Asia/Shanghai
+#server:
+#  port: 8001
+#
+#
+#spring:
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    url: jdbc:mysql://39.106.39.129:3306/data?useUnicode=true&characterEncoding=utf-8
+#    username: root
+#    password: 1311150301
+#    driverClassName: com.mysql.jdbc.Driver
+#    initialSize: 5
+#    minIdle: 50
+#    maxActive: 500
+#    maxWait: 60000
+#    timeBetweenEvictionRunsMillis: 60000
+#    minEvictableIdleTimeMillis: 300000
+#    validationQuery: SELECT 1 FROM DUAL
+#    testWhileIdle: true
+#    testOnBorrow: false
+#    testOnReturn: false
+#    poolPreparedStatements: true
+#    maxPoolPreparedStatementPerConnectionSize: 20
+#    filters: stat,wall,log4j
+#    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+#
+#    dynamic:
+#      primary: master
+#      hikari:
+#        driver-class-name: com.mysql.cl.jdbc.Driver
+#        max-pool-size: 200
+#        min-idle: 5
+#        connection-timeout: 60000
+#        connection-init-sql: 'select 1'
+#      datasource:
+#        master:
+#          url: jdbc:mysql://39.106.39.129:3306/data?useSSL=false&serverTimezone=Asia/Shanghai
 #          username: root
 #          password: 1311150301
-#          driver-class-name: com.mysql.cj.jdbc.Driver
-#        ct-coupon:
-#          url: jdbc:mysql://39.106.39.129:3306/ct-coupon?useSSL=false&serverTimezone=Asia/Shanghai
-#          username: root
-#          password: 1311150301
-#          driver-class-name: com.mysql.cj.jdbc.Driver
-#        ct-credit:
-#          url: jdbc:mysql://39.106.39.129:3306/ct-credit?useSSL=false&serverTimezone=Asia/Shanghai
-#          username: root
-#          password: 1311150301
-#          driver-class-name: com.mysql.cj.jdbc.Driver
-#        ct-lottery:
-#          url: jdbc:mysql://39.106.39.129:3306/ct-lottery?useSSL=false&serverTimezone=Asia/Shanghai
-#          username: root
-#          password: 1311150301
-#          driver-class-name: com.mysql.cj.jdbc.Driver
-#        ct-order:
-#          url: jdbc:mysql://39.106.39.129:3306/ct-order?useSSL=false&serverTimezone=Asia/Shanghai
-#          username: root
-#          password: 1311150301
-#          driver-class-name: com.mysql.cj.jdbc.Driver
-#        ct-package:
-#          url: jdbc:mysql://39.106.39.129:3306/ct-package?useSSL=false&serverTimezone=Asia/Shanghai
-#          username: root
-#          password: 1311150301
-#          driver-class-name: com.mysql.cj.jdbc.Driver
-#        ct-finance:
-#          url: jdbc:mysql://39.106.39.129:3306/ct-finance?useSSL=false&serverTimezone=Asia/Shanghai
-#          username: root
-#          password: 1311150301
-#          driver-class-name: com.mysql.cj.jdbc.Driver
-
-
-  transaction:
-    default-timeout: -1
-mybatis-plus:
-  mapper-locations: classpath:/mappers/ct/*/*.xml,classpath:/mappers/ct/*.xml
-
-
-
-activity:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://39.106.39.129:3306/ct-activity?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: 1311150301
-    driverClassName: com.mysql.jdbc.Driver
-    initialSize: 5
-    minIdle: 50
-    maxActive: 500
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxPoolPreparedStatementPerConnectionSize: 20
-    filters: stat,wall,log4j
-    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-coupon:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://39.106.39.129:3306/ct-coupon?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: 1311150301
-    driverClassName: com.mysql.jdbc.Driver
-    initialSize: 5
-    minIdle: 50
-    maxActive: 500
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxPoolPreparedStatementPerConnectionSize: 20
-    filters: stat,wall,log4j
-    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-credit:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://39.106.39.129:3306/ct-credit?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: 1311150301
-    driverClassName: com.mysql.jdbc.Driver
-    initialSize: 5
-    minIdle: 50
-    maxActive: 500
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxPoolPreparedStatementPerConnectionSize: 20
-    filters: stat,wall,log4j
-    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-finance:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://39.106.39.129:3306/ct-finance?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: 1311150301
-    driverClassName: com.mysql.jdbc.Driver
-    initialSize: 5
-    minIdle: 50
-    maxActive: 500
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxPoolPreparedStatementPerConnectionSize: 20
-    filters: stat,wall,log4j
-    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-lottery:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://39.106.39.129:3306/ct-lottery?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: 1311150301
-    driverClassName: com.mysql.jdbc.Driver
-    initialSize: 5
-    minIdle: 50
-    maxActive: 500
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxPoolPreparedStatementPerConnectionSize: 20
-    filters: stat,wall,log4j
-    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-order:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://39.106.39.129:3306/ct-order?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: 1311150301
-    driverClassName: com.mysql.jdbc.Driver
-    initialSize: 5
-    minIdle: 50
-    maxActive: 500
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxPoolPreparedStatementPerConnectionSize: 20
-    filters: stat,wall,log4j
-    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-package:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://39.106.39.129:3306/ct-package?useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: 1311150301
-    driverClassName: com.mysql.jdbc.Driver
-    initialSize: 5
-    minIdle: 50
-    maxActive: 500
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxPoolPreparedStatementPerConnectionSize: 20
-    filters: stat,wall,log4j
-    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+##          driver-class-name: com.mysql.jdbc.Driver
+##        ct-activity:
+##          url: jdbc:mysql://39.106.39.129:3306/ct-activity?useSSL=false&serverTimezone=Asia/Shanghai
+##          username: root
+##          password: 1311150301
+##          driver-class-name: com.mysql.cj.jdbc.Driver
+##        ct-coupon:
+##          url: jdbc:mysql://39.106.39.129:3306/ct-coupon?useSSL=false&serverTimezone=Asia/Shanghai
+##          username: root
+##          password: 1311150301
+##          driver-class-name: com.mysql.cj.jdbc.Driver
+##        ct-credit:
+##          url: jdbc:mysql://39.106.39.129:3306/ct-credit?useSSL=false&serverTimezone=Asia/Shanghai
+##          username: root
+##          password: 1311150301
+##          driver-class-name: com.mysql.cj.jdbc.Driver
+##        ct-lottery:
+##          url: jdbc:mysql://39.106.39.129:3306/ct-lottery?useSSL=false&serverTimezone=Asia/Shanghai
+##          username: root
+##          password: 1311150301
+##          driver-class-name: com.mysql.cj.jdbc.Driver
+##        ct-order:
+##          url: jdbc:mysql://39.106.39.129:3306/ct-order?useSSL=false&serverTimezone=Asia/Shanghai
+##          username: root
+##          password: 1311150301
+##          driver-class-name: com.mysql.cj.jdbc.Driver
+##        ct-package:
+##          url: jdbc:mysql://39.106.39.129:3306/ct-package?useSSL=false&serverTimezone=Asia/Shanghai
+##          username: root
+##          password: 1311150301
+##          driver-class-name: com.mysql.cj.jdbc.Driver
+##        ct-finance:
+##          url: jdbc:mysql://39.106.39.129:3306/ct-finance?useSSL=false&serverTimezone=Asia/Shanghai
+##          username: root
+##          password: 1311150301
+##          driver-class-name: com.mysql.cj.jdbc.Driver
+#
+#
+#  transaction:
+#    default-timeout: -1
+#mybatis-plus:
+#  mapper-locations: classpath:/mappers/ct/*/*.xml,classpath:/mappers/ct/*.xml
+#
+#
+#
+#activity:
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    url: jdbc:mysql://39.106.39.129:3306/ct-activity?useUnicode=true&characterEncoding=utf-8
+#    username: root
+#    password: 1311150301
+#    driverClassName: com.mysql.jdbc.Driver
+#    initialSize: 5
+#    minIdle: 50
+#    maxActive: 500
+#    maxWait: 60000
+#    timeBetweenEvictionRunsMillis: 60000
+#    minEvictableIdleTimeMillis: 300000
+#    validationQuery: SELECT 1 FROM DUAL
+#    testWhileIdle: true
+#    testOnBorrow: false
+#    testOnReturn: false
+#    poolPreparedStatements: true
+#    maxPoolPreparedStatementPerConnectionSize: 20
+#    filters: stat,wall,log4j
+#    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+#coupon:
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    url: jdbc:mysql://39.106.39.129:3306/ct-coupon?useUnicode=true&characterEncoding=utf-8
+#    username: root
+#    password: 1311150301
+#    driverClassName: com.mysql.jdbc.Driver
+#    initialSize: 5
+#    minIdle: 50
+#    maxActive: 500
+#    maxWait: 60000
+#    timeBetweenEvictionRunsMillis: 60000
+#    minEvictableIdleTimeMillis: 300000
+#    validationQuery: SELECT 1 FROM DUAL
+#    testWhileIdle: true
+#    testOnBorrow: false
+#    testOnReturn: false
+#    poolPreparedStatements: true
+#    maxPoolPreparedStatementPerConnectionSize: 20
+#    filters: stat,wall,log4j
+#    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+#credit:
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    url: jdbc:mysql://39.106.39.129:3306/ct-credit?useUnicode=true&characterEncoding=utf-8
+#    username: root
+#    password: 1311150301
+#    driverClassName: com.mysql.jdbc.Driver
+#    initialSize: 5
+#    minIdle: 50
+#    maxActive: 500
+#    maxWait: 60000
+#    timeBetweenEvictionRunsMillis: 60000
+#    minEvictableIdleTimeMillis: 300000
+#    validationQuery: SELECT 1 FROM DUAL
+#    testWhileIdle: true
+#    testOnBorrow: false
+#    testOnReturn: false
+#    poolPreparedStatements: true
+#    maxPoolPreparedStatementPerConnectionSize: 20
+#    filters: stat,wall,log4j
+#    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+#finance:
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    url: jdbc:mysql://39.106.39.129:3306/ct-finance?useUnicode=true&characterEncoding=utf-8
+#    username: root
+#    password: 1311150301
+#    driverClassName: com.mysql.jdbc.Driver
+#    initialSize: 5
+#    minIdle: 50
+#    maxActive: 500
+#    maxWait: 60000
+#    timeBetweenEvictionRunsMillis: 60000
+#    minEvictableIdleTimeMillis: 300000
+#    validationQuery: SELECT 1 FROM DUAL
+#    testWhileIdle: true
+#    testOnBorrow: false
+#    testOnReturn: false
+#    poolPreparedStatements: true
+#    maxPoolPreparedStatementPerConnectionSize: 20
+#    filters: stat,wall,log4j
+#    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+#lottery:
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    url: jdbc:mysql://39.106.39.129:3306/ct-lottery?useUnicode=true&characterEncoding=utf-8
+#    username: root
+#    password: 1311150301
+#    driverClassName: com.mysql.jdbc.Driver
+#    initialSize: 5
+#    minIdle: 50
+#    maxActive: 500
+#    maxWait: 60000
+#    timeBetweenEvictionRunsMillis: 60000
+#    minEvictableIdleTimeMillis: 300000
+#    validationQuery: SELECT 1 FROM DUAL
+#    testWhileIdle: true
+#    testOnBorrow: false
+#    testOnReturn: false
+#    poolPreparedStatements: true
+#    maxPoolPreparedStatementPerConnectionSize: 20
+#    filters: stat,wall,log4j
+#    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+#order:
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    url: jdbc:mysql://39.106.39.129:3306/ct-order?useUnicode=true&characterEncoding=utf-8
+#    username: root
+#    password: 1311150301
+#    driverClassName: com.mysql.jdbc.Driver
+#    initialSize: 5
+#    minIdle: 50
+#    maxActive: 500
+#    maxWait: 60000
+#    timeBetweenEvictionRunsMillis: 60000
+#    minEvictableIdleTimeMillis: 300000
+#    validationQuery: SELECT 1 FROM DUAL
+#    testWhileIdle: true
+#    testOnBorrow: false
+#    testOnReturn: false
+#    poolPreparedStatements: true
+#    maxPoolPreparedStatementPerConnectionSize: 20
+#    filters: stat,wall,log4j
+#    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+#package:
+#  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    url: jdbc:mysql://39.106.39.129:3306/ct-package?useUnicode=true&characterEncoding=utf-8
+#    username: root
+#    password: 1311150301
+#    driverClassName: com.mysql.jdbc.Driver
+#    initialSize: 5
+#    minIdle: 50
+#    maxActive: 500
+#    maxWait: 60000
+#    timeBetweenEvictionRunsMillis: 60000
+#    minEvictableIdleTimeMillis: 300000
+#    validationQuery: SELECT 1 FROM DUAL
+#    testWhileIdle: true
+#    testOnBorrow: false
+#    testOnReturn: false
+#    poolPreparedStatements: true
+#    maxPoolPreparedStatementPerConnectionSize: 20
+#    filters: stat,wall,log4j
+#    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000

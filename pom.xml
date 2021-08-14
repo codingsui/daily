@@ -17,6 +17,7 @@
         <module>web-test/sc-feign-client</module>
         <module>ribbon</module>
         <module>web-test/ribbon</module>
+        <module>data-center</module>
     </modules>
 
     <properties>

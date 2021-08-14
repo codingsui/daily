@@ -5,8 +5,6 @@ import cn.syl.dt.ct.mapper.datapackage.DataPackageMapper;
 import cn.syl.dt.ct.service.ICouponActivityService;
 import cn.syl.dt.ct.service.IDataPackageService;
 import cn.syl.dt.ct.service.IPromotionActivityService;
-import com.baomidou.dynamic.datasource.annotation.DS;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +23,8 @@ import java.util.List;
  */
 @Service
 @Slf4j
-@DS("ct-package")
-public class DataPackageServiceImpl extends ServiceImpl<DataPackageMapper, DataPackage> implements IDataPackageService {
+
+public class DataPackageServiceImpl  implements IDataPackageService {
 
     @Autowired
     private ICouponActivityService couponActivityService;
@@ -34,10 +32,13 @@ public class DataPackageServiceImpl extends ServiceImpl<DataPackageMapper, DataP
     @Autowired
     private IPromotionActivityService promotionActivityService;
 
+    @Autowired
+    private DataPackageMapper dataPackageMapper;
+
     @Override
     public List<DataPackage> queryAll() {
         log.info("12312");
-        List<DataPackage> list = list();
+        List<DataPackage> list = dataPackageMapper.queryAll();
         if (CollectionUtils.isEmpty(list)){
             return Lists.emptyList();
         }
