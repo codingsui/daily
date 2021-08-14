@@ -5,6 +5,14 @@ import java.io.IOException;
 
 public class MyClassLoaderTest {
     static class MyClassLoader extends ClassLoader{
+        public MyClassLoader(ClassLoader parent, String classPath) {
+            super(parent);
+            this.classPath = classPath;
+        }
+
+        public MyClassLoader(String classPath) {
+            this.classPath = classPath;
+        }
 
         private String classPath;
 
