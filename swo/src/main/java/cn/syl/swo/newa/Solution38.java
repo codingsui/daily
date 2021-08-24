@@ -1,6 +1,7 @@
 package cn.syl.swo.newa;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -14,6 +15,10 @@ import java.util.List;
  * 你可以以任意顺序返回这个字符串数组，但里面不能有重复元素。
  */
 public class Solution38 {
+
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(new Solution38().permutation("ABC")));
+    }
 
     /**
      * 深度优先搜索+剪枝

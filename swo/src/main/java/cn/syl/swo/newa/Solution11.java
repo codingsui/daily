@@ -52,21 +52,21 @@ public class Solution11 {
         int mid = 0;
         while (left < right){
             mid = (left + right) / 2;
-            if (numbers[mid] < numbers[left]){
-                right = mid - 1;
-            }else if (numbers[mid] > numbers[left]){
+            if (numbers[mid] < numbers[right]){
+                right = mid;
+            }else if (numbers[mid] > numbers[right]){
                 left = mid + 1;
             }else {
-                break;
+                right--;
             }
         }
 
-        return numbers[mid];
+        return numbers[right];
     }
 
     public static void main(String[] args) {
         Solution11 s = new Solution11();
-        int[] a = {1,3,5};
+        int[] a = {3,4,5,1};
         System.out.println(s.minArray2(a));
     }
 }

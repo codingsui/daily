@@ -51,6 +51,7 @@ public class Solution07 {
             return null;
         }
         TreeNode root = new TreeNode(preorder[preIndex]);
+        // 根节点在中序遍历中的位置：in_root_index
         int idx = map.get(preorder[preIndex]);
         root.left = recuror(preIndex+1,leftIndex,idx -1);
         root.right = recuror(preIndex + (idx - 1 - leftIndex + 1) + 1,idx + 1,rightIndex);
