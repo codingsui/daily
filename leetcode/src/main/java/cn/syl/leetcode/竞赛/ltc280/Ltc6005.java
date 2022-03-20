@@ -1,4 +1,4 @@
-package cn.syl.leetcode.竞赛.ltc287;
+package cn.syl.leetcode.竞赛.ltc280;
 
 import java.util.*;
 

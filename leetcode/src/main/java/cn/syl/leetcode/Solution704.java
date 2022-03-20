@@ -1,38 +1,41 @@
 package cn.syl.leetcode;
 
+import org.junit.Assert;
+
 import java.util.HashMap;
-import java.util.Stack;
 
 /**
+ *二分查找
+ *给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。
  *
  *
  */
-public class Solution3 {
+public class Solution704 {
 
-    /**
-     * dp[i][j]=dp[i+1][j-1] & s[i] ==
-     * @param s
-     * @return
-     */
-    public int lengthOfLongestSubstring(String s) {
-        if (s == null || s.length() == 0){
-            return 0;
+
+    public int search(int[] nums, int target) {
+        if(nums == null || nums.length == 0){
+            return -1;
         }
-        HashMap<Character,Integer> map = new HashMap<>();
-        int n = s.length();
-        int res = 0;
-        for (int start = 0,end = 0; end < n; end++) {
-            if (map.containsKey(s.charAt(end))){
-                start = Math.max(map.get(s.charAt(end)) + 1,start);
+        int i = 0;
+        int j = nums.length - 1;
+        while (i<=j){
+            int index = (i + j) / 2;
+            if (nums[index] > target){
+                j = index-1;
+            }else if (nums[index] < target){
+                i = index+1;
+            }else {
+                return index;
             }
-            res = Math.max(res,end-start+1);
-            map.put(s.charAt(end),end);
         }
-        return res;
+        return -1;
     }
 
+
+
     public static void main(String[] args) {
-        String a ="abba";
-        System.out.println(new Solution3().lengthOfLongestSubstring(a));
+        Assert.assertEquals(new Solution704().search(new int[]{-1,0,3,5,9,12},9),4);
+        System.out.println(3 / 2);
     }
 }

@@ -1,38 +1,26 @@
 package cn.syl.leetcode;
 
 import java.util.HashMap;
-import java.util.Stack;
 
 /**
- *
+ *278. 第一个错误的版本
  *
  */
-public class Solution3 {
+public class Solution278 {
 
-    /**
-     * dp[i][j]=dp[i+1][j-1] & s[i] ==
-     * @param s
-     * @return
-     */
-    public int lengthOfLongestSubstring(String s) {
-        if (s == null || s.length() == 0){
-            return 0;
-        }
-        HashMap<Character,Integer> map = new HashMap<>();
-        int n = s.length();
-        int res = 0;
-        for (int start = 0,end = 0; end < n; end++) {
-            if (map.containsKey(s.charAt(end))){
-                start = Math.max(map.get(s.charAt(end)) + 1,start);
+    public int firstBadVersion(int n) {
+        int l = 0;
+        int r = n;
+        while (l < r){
+            int mid = l + (r - l) / 2;
+            if (isBadVersion(mid)){
+                r = mid;
+            }else {
+                l = mid + 1;
             }
-            res = Math.max(res,end-start+1);
-            map.put(s.charAt(end),end);
         }
-        return res;
+        return l;
     }
 
-    public static void main(String[] args) {
-        String a ="abba";
-        System.out.println(new Solution3().lengthOfLongestSubstring(a));
-    }
+    boolean isBadVersion(int version){return false;}
 }
