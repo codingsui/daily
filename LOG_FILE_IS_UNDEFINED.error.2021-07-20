@@ -1,9 +1,0 @@
-2021-07-20 20:07:50.950 [restartedMain] [--] WARN  c.b.m.core.metadata.TableInfoHelper 296 - Warn: Could not find @TableId in Class: cn.syl.dt.ct.entity.RefillRequest.
-2021-07-20 20:07:51.029 [restartedMain] [--] WARN  c.b.m.core.metadata.TableInfoHelper 296 - Warn: Could not find @TableId in Class: cn.syl.dt.ct.entity.RefillResponse.
-2021-07-20 20:07:51.095 [restartedMain] [--] WARN  c.b.m.core.metadata.TableInfoHelper 296 - Warn: Could not find @TableId in Class: cn.syl.dt.ct.entity.Credit.
-2021-07-20 20:07:51.144 [restartedMain] [--] WARN  c.b.m.core.metadata.TableInfoHelper 296 - Warn: Could not find @TableId in Class: cn.syl.dt.ct.entity.AccountAmount.
-2021-07-20 20:07:51.167 [restartedMain] [--] WARN  c.b.m.core.metadata.TableInfoHelper 296 - Warn: Could not find @TableId in Class: cn.syl.dt.ct.entity.LotteryDraw.
-2021-07-20 20:07:51.189 [restartedMain] [--] WARN  c.b.m.core.metadata.TableInfoHelper 296 - Warn: Could not find @TableId in Class: cn.syl.dt.ct.entity.RefillOrder.
-2021-07-20 20:07:51.324 [restartedMain] [--] WARN  c.b.m.core.metadata.TableInfoHelper 296 - Warn: Could not find @TableId in Class: cn.syl.dt.ct.entity.PromotionActivity.
-2021-07-20 20:07:51.527 [restartedMain] [--] WARN  c.a.icatch.provider.imp.AssemblerImp 24 - Thanks for using Atomikos! Evaluate http://www.atomikos.com/Main/ExtremeTransactions for advanced features and professional support
-or register at http://www.atomikos.com/Main/RegisterYourDownload to disable this message and receive FREE tips & advice
