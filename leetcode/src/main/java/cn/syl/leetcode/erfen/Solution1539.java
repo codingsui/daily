@@ -13,6 +13,9 @@ public class Solution1539 {
 
         Assert.assertEquals(9, s.findKthPositive2(new int[]{2,3,4,7,11}, 5));
         Assert.assertEquals(6, s.findKthPositive2(new int[]{1,2,3,4}, 2));
+
+        Assert.assertEquals(9, s.findKthPositive3(new int[]{2,3,4,7,11}, 5));
+        Assert.assertEquals(6, s.findKthPositive3(new int[]{1,2,3,4}, 2));
     }
     public int findKthPositive(int[] arr, int k) {
         int left = 0;
@@ -44,6 +47,39 @@ public class Solution1539 {
             }
         }
         return lastMiss;
+    }
+
+    public int findKthPositive3(int[] arr, int k) {
+        if (arr[0] > k) {
+            return k;
+        }
+        int left = 0;
+        int right = arr.length;
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            int x = mid > arr.length ? Integer.MAX_VALUE : arr[mid] - mid - 1;
+            if (x >= k) {
+                right = mid;
+            } else if (x < k) {
+                left = mid + 1;
+            }
+        }
+        return arr[left-1] + k - (arr[left-1] - (left - 1) - 1);
+    }
+
+    public int findKthPositive4(int[] arr, int k) {
+        int left = 0;
+        int right = arr.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int x = mid > arr.length ? Integer.MAX_VALUE : arr[mid] - mid - 1;
+            if (x >= k) {
+                right = mid - 1;
+            } else if (x < k) {
+                left = mid + 1;
+            }
+        }
+        return k + left;
     }
 
 
